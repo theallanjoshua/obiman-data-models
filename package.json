@@ -1,0 +1,37 @@
+{
+  "name": "@obiman/data-models",
+  "version": "1.0.1",
+  "description": "A collection of all data models utilized in Obiman",
+  "files": [
+    "lib"
+  ],
+  "main": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theallanjoshua/obiman-data-models.git"
+  },
+  "author": "Allan Joshua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/theallanjoshua/obiman-data-models/issues"
+  },
+  "homepage": "https://github.com/theallanjoshua/obiman-data-models#readme",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release-patch": "npm version patch && npm run build && npm publish"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.3.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-loader": "^8.0.5",
+    "clean-webpack-plugin": "^2.0.2",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "webpack": "^4.29.6",
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.3.2"
+  }
+}
