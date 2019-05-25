@@ -1,5 +1,5 @@
 {
-  "name": "@obiman/data-models",
+  "name": "obiman-data-models",
   "version": "1.0.0",
   "description": "A collection of all data models utilized in Obiman",
   "files": [
@@ -33,5 +33,6 @@
     "webpack": "^4.29.6",
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.3.2"
-  }
+  },
+  "dependencies": {}
 }

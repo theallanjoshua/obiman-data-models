@@ -11,8 +11,9 @@ module.exports = {
   output: {
     path: outputDir,
     filename: 'index.js',
-    library: '@obiman/data-model',
-    libraryTarget: 'umd'
+    library: 'obiman-data-model',
+    libraryTarget: 'umd',
+    globalObject: 'this'
   },
   module: {
     rules: [
