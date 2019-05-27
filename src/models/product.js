@@ -1,6 +1,6 @@
 export default class Product {
   constructor(product){
-    const { id, label, description, image, composition, recipe, price, currency, tax, businessId } = { ...product };
+    const { id, label, description, image, composition, recipe, price, currency, tax, businessId, createdDate, updatedDate, version } = { ...product };
     this.id = id || '';
     this.label = label || '';
     this.description = description || '';
@@ -11,52 +11,28 @@ export default class Product {
     this.currency = currency || '';
     this.tax = tax || [];
     this.businessId = businessId || '';
+    this.createdDate = createdDate || 0;
+    this.updatedDate = updatedDate || 0;
+    this.version = version || 0;
   }
   get = () => {
-    const { id, label, description, image, composition, recipe, price, currency, tax, businessId } = { ...this };
-    return { id, label, description, image, composition, recipe, price, currency, tax, businessId };
+    return { ...this };
   }
   set = (key, value) => {
     this[key] = value;
+    return this;
   }
-  setId = id =>{
-    this.set('id', id);
-    return this.get();
-  }
-  setLabel = label =>{
-    this.set('label', label);
-    return this.get();
-  }
-  setDescription = description =>{
-    this.set('description', description);
-    return this.get();
-  }
-  setImage = image =>{
-    this.set('image', image);
-    return this.get();
-  }
-  setComposition = composition =>{
-    this.set('composition', composition);
-    return this.get();
-  }
-  setRecipe = recipe =>{
-    this.set('recipe', recipe);
-    return this.get();
-  }
-  setPrice = price =>{
-    this.set('price', price);
-    return this.get();
-  }
-  setCurrency = currency =>{
-    this.set('currency', currency);
-    return this.get();
-  }
-  setTax = tax =>{
-    this.set('tax', tax);
-    return this.get();
-  }
-  setBusinessId = businessId =>{
-    this.set('businessId', businessId);
-    return this.get();
-  }
+  setId = id => this.set('id', id);
+  setLabel = label => this.set('label', label);
+  setDescription = description => this.set('description', description);
+  setImage = image => this.set('image', image);
+  setComposition = composition => this.set('composition', composition);
+  setRecipe = recipe => this.set('recipe', recipe);
+  setPrice = price => this.set('price', price);
+  setCurrency = currency => this.set('currency', currency);
+  setTax = tax => this.set('tax', tax);
+  setBusinessId = businessId => this.set('businessId', businessId);
+  setCreatedDate = createdDate => this.set('createdDate', createdDate);
+  setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
+  setVersion = version => this.set('version', version);
 }
