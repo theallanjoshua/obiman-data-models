@@ -4,15 +4,16 @@ export default class Response {
     this.errors = [];
   }
   get = () => {
-    const { output, errors } = { ...this };
-    return { output, errors };
+    return { ...this };
   }
   success = output =>{
     this.output = { ...output };
     this.errors = [];
+    return this;
   }
   error = error => {
     this.output = {};
     this.errors = [ ...this.errors, error ];
+    return this;
   }
 }
