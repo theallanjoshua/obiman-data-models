@@ -19,9 +19,7 @@ export default class Ingredient {
     this.updatedDate = updatedDate || 0;
     this.version = version || 0;
   }
-  get = () => {
-    return { ...this };
-  }
+  get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getUnits = () => convert().possibilities();
   getCurrencyCodes = () => cc.codes();
   set = (key, value) => {

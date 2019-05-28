@@ -3,9 +3,7 @@ export default class Response {
     this.output = {};
     this.errors = [];
   }
-  get = () => {
-    return { ...this };
-  }
+  get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   success = output =>{
     this.output = { ...output };
     this.errors = [];
