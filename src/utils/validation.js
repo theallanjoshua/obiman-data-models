@@ -1,16 +1,16 @@
 const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownKey, dropdownLabel, dropdownValue, dropdownValues) => {
   let errors = {};
   if(isNaN(numberValue)) {
-    errors[numberKey] = { [numberKey]: [ ...(errors[numberKey] || []), `${numberLabel} has to be a number` ] }
+    errors[numberKey] = [ ...(errors[numberKey] || []), `${numberLabel} has to be a number` ]
   }
   if(numberValue < 0) {
-    errors[numberKey] = { [numberKey]: [ ...(errors[numberKey] || []), `${numberLabel} cannot be below 0` ] }
+    errors[numberKey] = [ ...(errors[numberKey] || []), `${numberLabel} cannot be below 0` ]
   }
   if(numberValue && !dropdownValue.trim()) {
-    errors.unit = { [dropdownKey]: [ ...(errors[dropdownKey] || []), `${dropdownLabel} cannot be empty when ${numberLabel.toLowerCase()} is entered` ] }
+    errors[dropdownKey] = [ ...(errors[dropdownKey] || []), `${dropdownLabel} cannot be empty when ${numberLabel.toLowerCase()} is entered` ]
   }
   if(numberValue && !dropdownValues.filter(value => value === dropdownValue).length) {
-    errors.unit = { [dropdownKey]: [ ...(errors[dropdownKey] || []), `Invalid ${dropdownLabel.toLowerCase()}. Please select valid ${dropdownLabel.toLowerCase()} from dropdown` ] }
+    errors[dropdownKey] = [ ...(errors[dropdownKey] || []), `Invalid ${dropdownLabel.toLowerCase()}. Please select valid ${dropdownLabel.toLowerCase()} from dropdown` ]
   }
   return { ...errors };
 }
