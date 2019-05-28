@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "convert-units": "^2.3.4",
-    "currency-codes": "^1.5.0"
+    "currency-symbol-map": "^4.0.4"
   }
 }
