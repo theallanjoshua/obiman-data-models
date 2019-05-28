@@ -1,5 +1,6 @@
 import convert from 'convert-units';
-import currencyToSymbolMap from 'currency-symbol-map/map'
+import currencyToSymbolMap from 'currency-symbol-map/map';
+import getSymbolFromCurrency from 'currency-symbol-map';
 import { quantityUnitValidation, costCurrencyValidation } from '../utils/validation';
 
 export default class Ingredient {
@@ -21,7 +22,8 @@ export default class Ingredient {
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getUnits = () => convert().possibilities();
-  getCurrencyCodes = () => Array.from(new Set(Object.values(currencyToSymbolMap)));
+  getCurrencyCodes = () => Array.from(new Set(Object.keys(currencyToSymbolMap)));
+  getCurrencySymbol = currencyCode => getSymbolFromCurrency(currencyCode);
   set = (key, value) => {
     this[key] = value;
     return this;
