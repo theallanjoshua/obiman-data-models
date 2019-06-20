@@ -46,6 +46,15 @@ export default class Product {
       return { ...ingredientErrors, ...quantityUnitErrors };
     });
     const priceCurrencyErrors = costCurrencyValidation('price', 'Selling price', this.price, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
-    return { ...labelErrors, composition: compositionErrors, ...priceCurrencyErrors };
+    const validationData = { ...labelErrors, composition: compositionErrors, ...priceCurrencyErrors };
+    const validationErrors = Object.keys(validationData).reduce((acc, key) => {
+      if (key === 'composition') {
+        const hasCompositionErrors = validationData.composition.reduce((acc, entity) => acc || !!Object.keys(entity).length, false);
+        return hasCompositionErrors ? { ...acc, [key]: validationData[key] } : { ...acc };
+      } else {
+        return { ...acc, [key]: validationData[key] } ;
+      }
+    }, {});
+    return validationErrors;
   }
 }
