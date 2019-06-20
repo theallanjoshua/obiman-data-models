@@ -42,7 +42,7 @@ export default class Product {
     const labelErrors = !this.label.trim() ? { label: ['Name of the product cannot be empty' ] } : {};
     const compositionErrors = this.composition.map(entity => {
       const ingredientErrors = !entity.ingredient ? { ingredient: ['Name of the ingredient cannot be empty' ] } : {};
-      const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', entity.quantity, 'unit', 'Unit', entity.unit, utils.getUnits());
+      const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', entity.quantity, 'unit', 'Unit', entity.unit, utils.getUnits(), true);
       return { ...ingredientErrors, ...quantityUnitErrors };
     });
     const priceCurrencyErrors = costCurrencyValidation('price', 'Selling price', this.price, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());

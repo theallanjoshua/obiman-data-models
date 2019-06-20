@@ -1,5 +1,8 @@
-const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownKey, dropdownLabel, dropdownValue, dropdownValues) => {
+const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownKey, dropdownLabel, dropdownValue, dropdownValues, isMandatory = false) => {
   let errors = {};
+  if(isMandatory && !numberValue) {
+    errors[numberKey] = [ ...(errors[numberKey] || []), `${numberLabel} cannot be empty` ]
+  }
   if(isNaN(numberValue)) {
     errors[numberKey] = [ ...(errors[numberKey] || []), `${numberLabel} has to be a number` ]
   }
@@ -15,10 +18,10 @@ const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownK
   return { ...errors };
 }
 
-export const quantityUnitValidation = (quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits) => {
-  return numberDropdownValidation(quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits);
+export const quantityUnitValidation = (quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits, isMandatory) => {
+  return numberDropdownValidation(quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits, isMandatory);
 }
 
-export const costCurrencyValidation = (costKey, costLabel, costValue, currencyKey, currencyLabel, currencyValue, validCurrencies) => {
-  return numberDropdownValidation(costKey, costLabel, costValue, currencyKey, currencyLabel, currencyValue, validCurrencies);
+export const costCurrencyValidation = (costKey, costLabel, costValue, currencyKey, currencyLabel, currencyValue, validCurrencies, isMandatory) => {
+  return numberDropdownValidation(costKey, costLabel, costValue, currencyKey, currencyLabel, currencyValue, validCurrencies, isMandatory);
 }
