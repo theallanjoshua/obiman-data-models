@@ -46,6 +46,6 @@ export default class Product {
       return { ...ingredientErrors, ...quantityUnitErrors };
     });
     const priceCurrencyErrors = costCurrencyValidation('price', 'Selling price', this.price, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
-    return { ...labelErrors, ...quantityUnitErrors, ...priceCurrencyErrors, composition: compositionErrors };
+    return { ...labelErrors, composition: compositionErrors, ...priceCurrencyErrors };
   }
 }
