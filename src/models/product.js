@@ -1,3 +1,6 @@
+import Utils from './utils';
+import { quantityUnitValidation, costCurrencyValidation } from '../utils/validation';
+
 export default class Product {
   constructor(product){
     const { id, label, description, image, composition, recipe, price, currency, tax, businessId, createdDate, updatedDate, version } = { ...product };
@@ -14,6 +17,7 @@ export default class Product {
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.version = version || 0;
+    this.utils = new Utils();
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   set = (key, value) => {
@@ -33,4 +37,15 @@ export default class Product {
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setVersion = version => this.set('version', version);
+  validate = () => {
+    const utils = new Utils();
+    const labelErrors = !this.label.trim() ? { label: ['Name of the product cannot be empty' ] } : {};
+    const compositionErrors = this.composition.map(entity => {
+      const ingredientErrors = !entity.trim() ? { ingredient: ['Name of the ingredient cannot be empty' ] } : {};
+      const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
+      return { ...ingredientErrors, ...quantityUnitErrors };
+    });
+    const priceCurrencyErrors = costCurrencyValidation('price', 'Selling price', this.price, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
+    return { ...labelErrors, ...quantityUnitErrors, ...priceCurrencyErrors, composition: compositionErrors };
+  }
 }

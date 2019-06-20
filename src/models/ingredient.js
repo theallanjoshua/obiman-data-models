@@ -1,6 +1,4 @@
-import convert from 'convert-units';
-import currencyToSymbolMap from 'currency-symbol-map/map';
-import getSymbolFromCurrency from 'currency-symbol-map';
+import Utils from './utils';
 import { quantityUnitValidation, costCurrencyValidation } from '../utils/validation';
 
 export default class Ingredient {
@@ -21,9 +19,6 @@ export default class Ingredient {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
-  getUnits = () => convert().possibilities();
-  getCurrencyCodes = () => Array.from(new Set(Object.keys(currencyToSymbolMap)));
-  getCurrencySymbol = currencyCode => getSymbolFromCurrency(currencyCode);
   set = (key, value) => {
     this[key] = value;
     return this;
@@ -42,10 +37,11 @@ export default class Ingredient {
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setVersion = version => this.set('version', version);
   validate = () => {
-    const labelErrors = !this.label.trim() ? { label: ['Name of the ingredient cannot be empty' ] } : {}
-    const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, this.getUnits());
-    const costCurrencyErrors = costCurrencyValidation('cost', 'Cost', this.cost, 'currency', 'Currency', this.currency, this.getCurrencyCodes());
-    const thresholdQuantityUnitErrors = quantityUnitValidation('thresholdQuantity', 'Threshold quantity', this.thresholdQuantity, 'thresholdUnit', 'Threshold unit', this.thresholdUnit, this.getUnits());
+    const utils = new Utils();
+    const labelErrors = !this.label.trim() ? { label: ['Name of the ingredient cannot be empty' ] } : {};
+    const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
+    const costCurrencyErrors = costCurrencyValidation('cost', 'Cost', this.cost, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
+    const thresholdQuantityUnitErrors = quantityUnitValidation('thresholdQuantity', 'Threshold quantity', this.thresholdQuantity, 'thresholdUnit', 'Threshold unit', this.thresholdUnit, utils.getUnits());
     return { ...labelErrors, ...quantityUnitErrors, ...costCurrencyErrors, ...thresholdQuantityUnitErrors };
   }
 }
