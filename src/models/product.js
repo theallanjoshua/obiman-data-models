@@ -10,7 +10,7 @@ export default class Product {
       description,
       image,
       composition,
-      unavailableCompositionCount,
+      lowInventoryIngredients,
       recipe,
       price,
       currency,
@@ -25,7 +25,7 @@ export default class Product {
     this.description = description || '';
     this.image = image || '';
     this.composition = (composition || []).map(item => new ProductCompositionEntity(item).get());
-    this.unavailableCompositionCount = unavailableCompositionCount || 0;
+    this.lowInventoryIngredients = lowInventoryIngredients || [];
     this.recipe = recipe || '';
     this.price = price || 0;
     this.currency = currency || '';
@@ -44,8 +44,8 @@ export default class Product {
   setLabel = label => this.set('label', label);
   setDescription = description => this.set('description', description);
   setImage = image => this.set('image', image);
-  setComposition = composition => this.set('composition', (composition || []).map(item => new ProductCompositionEntity(item).get()));
-  setUnavailableCompositionCount = unavailableCompositionCount => this.set('unavailableCompositionCount', unavailableCompositionCount);
+  setComposition = composition => this.set('composition', composition.map(item => new ProductCompositionEntity(item).get()));
+  setLowInventoryIngredients = lowInventoryIngredients => this.set('lowInventoryIngredients', lowInventoryIngredients);
   setRecipe = recipe => this.set('recipe', recipe);
   setPrice = price => this.set('price', price);
   setCurrency = currency => this.set('currency', currency);
