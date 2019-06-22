@@ -1,14 +1,31 @@
 import Utils from './utils';
-import { quantityUnitValidation, costCurrencyValidation } from '../utils/validation';
+import { costCurrencyValidation } from '../utils/validation';
+import ProductCompositionEntity from './product-composition-entity';
 
 export default class Product {
   constructor(product){
-    const { id, label, description, image, composition, recipe, price, currency, tax, businessId, createdDate, updatedDate, version } = { ...product };
+    const {
+      id,
+      label,
+      description,
+      image,
+      composition,
+      unavailableCompositionCount,
+      recipe,
+      price,
+      currency,
+      tax,
+      businessId,
+      createdDate,
+      updatedDate,
+      version
+    } = { ...product };
     this.id = id || '';
     this.label = label || '';
     this.description = description || '';
     this.image = image || '';
-    this.composition = composition || [];
+    this.composition = (composition || []).map(item => new ProductCompositionEntity(item).get());
+    this.unavailableCompositionCount = unavailableCompositionCount || 0;
     this.recipe = recipe || '';
     this.price = price || 0;
     this.currency = currency || '';
@@ -17,7 +34,6 @@ export default class Product {
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.version = version || 0;
-    this.utils = new Utils();
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   set = (key, value) => {
@@ -28,7 +44,8 @@ export default class Product {
   setLabel = label => this.set('label', label);
   setDescription = description => this.set('description', description);
   setImage = image => this.set('image', image);
-  setComposition = composition => this.set('composition', composition);
+  setComposition = composition => this.set('composition', (composition || []).map(item => new ProductCompositionEntity(item).get()));
+  setUnavailableCompositionCount = unavailableCompositionCount => this.set('unavailableCompositionCount', unavailableCompositionCount);
   setRecipe = recipe => this.set('recipe', recipe);
   setPrice = price => this.set('price', price);
   setCurrency = currency => this.set('currency', currency);
@@ -40,21 +57,12 @@ export default class Product {
   validate = () => {
     const utils = new Utils();
     const labelErrors = !this.label.trim() ? { label: ['Name of the product cannot be empty' ] } : {};
-    const compositionErrors = this.composition.map(entity => {
-      const ingredientErrors = !entity.ingredient ? { ingredient: ['Name of the ingredient cannot be empty' ] } : {};
-      const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', entity.quantity, 'unit', 'Unit', entity.unit, utils.getUnits(), true);
-      return { ...ingredientErrors, ...quantityUnitErrors };
-    });
-    const priceCurrencyErrors = costCurrencyValidation('price', 'Selling price', this.price, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
-    const validationData = { ...labelErrors, composition: compositionErrors, ...priceCurrencyErrors };
-    const validationErrors = Object.keys(validationData).reduce((acc, key) => {
-      if (key === 'composition') {
-        const hasCompositionErrors = validationData.composition.reduce((acc, entity) => acc || !!Object.keys(entity).length, false);
-        return hasCompositionErrors ? { ...acc, [key]: validationData[key] } : { ...acc };
-      } else {
-        return { ...acc, [key]: validationData[key] } ;
-      }
+    const compositionErrors = this.composition.reduce((acc, item) => {
+      const productCompositionEntity = new ProductCompositionEntity(item);
+      const validationErrors = productCompositionEntity.validate();
+      return Object.keys(validationErrors).length ? { ...acc, composition: ['Composition has errors'] } : { ...acc };
     }, {});
-    return validationErrors;
+    const priceCurrencyErrors = costCurrencyValidation('price', 'Selling price', this.price, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
+    return { ...labelErrors, ...compositionErrors, ...priceCurrencyErrors };
   }
 }

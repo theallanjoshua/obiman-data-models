@@ -3,7 +3,21 @@ import { quantityUnitValidation, costCurrencyValidation } from '../utils/validat
 
 export default class Ingredient {
   constructor(ingredient) {
-    const { id, label, quantity, unit, cost, currency, thresholdQuantity, thresholdUnit, expiryDate, businessId, createdDate, updatedDate, version } = { ...ingredient };
+    const {
+      id,
+      label,
+      quantity,
+      unit,
+      cost,
+      currency,
+      thresholdQuantity,
+      thresholdUnit,
+      expiryDate,
+      businessId,
+      createdDate,
+      updatedDate,
+      version
+    } = { ...ingredient };
     this.id = id || '';
     this.label = label || '';
     this.quantity = quantity || 0;
