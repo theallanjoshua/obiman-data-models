@@ -41,6 +41,6 @@ export default class Bill {
       const validationErrors = billCompositionEntity.validate();
       return Object.keys(validationErrors).length ? { ...acc, composition: ['Composition has errors'] } : { ...acc };
     }, {});
-    return { ...labelErrors, ...compositionErrors, ...priceCurrencyErrors };
+    return { ...labelErrors, ...compositionErrors };
   }
 }
