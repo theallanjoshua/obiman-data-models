@@ -33,7 +33,10 @@ export default class Ingredient {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
-  set = (key, value) => ({ ...this, [key]: value});
+  set = (key, value) => {
+    this[key] = value;
+    return this;
+  }
   setId = id => this.set('id', id);
   setLabel = label => this.set('label', label);
   setQuantity = quantity => this.set('quantity', quantity);
