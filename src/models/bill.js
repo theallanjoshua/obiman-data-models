@@ -14,7 +14,7 @@ export default class Bill {
     } = { ...bill };
     this.id = id || '';
     this.label = label || '';
-    this.composition = (composition || []).map(item => new BillCompositionEntity(item));
+    this.composition = (composition || []).map(item => new BillCompositionEntity(item).get());
     this.status = status || '';
     this.total = total || 0;
     this.createdDate = createdDate || 0;
@@ -28,7 +28,7 @@ export default class Bill {
   }
   setId = id => this.set('id', id);
   setLabel = label => this.set('label', label);
-  setComposition = composition => this.set('composition', composition.map(item => new BillCompositionEntity(item)));
+  setComposition = composition => this.set('composition', composition);
   setStatus = status => this.set('status', status);
   setTotal = total => this.set('total', total);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);

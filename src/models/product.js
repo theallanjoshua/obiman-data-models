@@ -44,7 +44,7 @@ export default class Product {
   setLabel = label => this.set('label', label);
   setDescription = description => this.set('description', description);
   setImage = image => this.set('image', image);
-  setComposition = composition => this.set('composition', composition.map(item => new ProductCompositionEntity(item).get()));
+  setComposition = composition => this.set('composition', composition);
   setLowInventoryIngredients = lowInventoryIngredients => this.set('lowInventoryIngredients', lowInventoryIngredients);
   setMaxRepetition = maxRepetition => this.set('maxRepetition', maxRepetition);
   setRecipe = recipe => this.set('recipe', recipe);
