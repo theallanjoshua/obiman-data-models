@@ -8,13 +8,15 @@ export default class ProductCompositionEntity {
       label,
       quantity,
       unit,
-      quantityGap
+      quantityGap,
+      maxRepetition
     } = { ...productCompositionEntity };
     this.id = id || '';
     this.label = label || '';
     this.quantity = quantity || 0;
     this.unit = unit || '';
     this.quantityGap = quantityGap || 0;
+    this.maxRepetition = maxRepetition || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   set = (key, value) => {
@@ -26,6 +28,7 @@ export default class ProductCompositionEntity {
   setQuantity = quantity => this.set('quantity', quantity);
   setUnit = unit => this.set('unit', unit);
   setQuantityGap = quantityGap => this.set('quantityGap', quantityGap);
+  setMaxRepetition = maxRepetition => this.set('maxRepetition', maxRepetition);
   validate = () => {
     const utils = new Utils();
     const ingredientErrors = !this.id ? { id: ['Name of the ingredient cannot be empty' ] } : {};
