@@ -8,7 +8,6 @@ export default class Bill {
       composition,
       status,
       total,
-      businessId,
       createdDate,
       updatedDate,
       version
@@ -18,7 +17,6 @@ export default class Bill {
     this.composition = (composition || []).map(item => new BillCompositionEntity(item));
     this.status = status || '';
     this.total = total || 0;
-    this.businessId = businessId || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.version = version || 0;
@@ -33,7 +31,6 @@ export default class Bill {
   setComposition = composition => this.set('composition', composition.map(item => new BillCompositionEntity(item)));
   setStatus = status => this.set('status', status);
   setTotal = total => this.set('total', total);
-  setBusinessId = businessId => this.set('businessId', businessId);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setVersion = version => this.set('version', version);

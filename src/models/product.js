@@ -16,7 +16,6 @@ export default class Product {
       price,
       currency,
       tax,
-      businessId,
       createdDate,
       updatedDate,
       version
@@ -32,7 +31,6 @@ export default class Product {
     this.price = price || 0;
     this.currency = currency || '';
     this.tax = tax || [];
-    this.businessId = businessId || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.version = version || 0;
@@ -53,7 +51,6 @@ export default class Product {
   setPrice = price => this.set('price', price);
   setCurrency = currency => this.set('currency', currency);
   setTax = tax => this.set('tax', tax);
-  setBusinessId = businessId => this.set('businessId', businessId);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setVersion = version => this.set('version', version);

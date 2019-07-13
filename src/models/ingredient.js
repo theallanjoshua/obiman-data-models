@@ -13,7 +13,6 @@ export default class Ingredient {
       thresholdQuantity,
       thresholdUnit,
       expiryDate,
-      businessId,
       createdDate,
       updatedDate,
       version
@@ -27,7 +26,6 @@ export default class Ingredient {
     this.thresholdQuantity = thresholdQuantity || 0;
     this.thresholdUnit = thresholdUnit || '';
     this.expiryDate = expiryDate || 0;
-    this.businessId = businessId || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.version = version || 0;
@@ -46,7 +44,6 @@ export default class Ingredient {
   setThresholdQuantity = thresholdQuantity => this.set('thresholdQuantity', thresholdQuantity);
   setThresholdUnit = thresholdUnit => this.set('thresholdUnit', thresholdUnit);
   setExpiryDate = expiryDate => this.set('expiryDate', expiryDate);
-  setBusinessId = businessId => this.set('businessId', businessId);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setVersion = version => this.set('version', version);
