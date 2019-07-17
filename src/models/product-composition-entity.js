@@ -13,8 +13,6 @@ export default class ProductCompositionEntity {
     this.label = label || '';
     this.quantity = quantity || 0;
     this.unit = unit || '';
-    this.quantityGap = quantityGap || 0;
-    this.maxRepetition = maxRepetition || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   set = (key, value) => {
