@@ -11,6 +11,7 @@ export default class Utils {
     .map(({ abbr }) => abbr);
   getCurrencyCodes = () => Array.from(new Set(Object.keys(currencyToSymbolMap)));
   getCurrencySymbol = currencyCode => getSymbolFromCurrency(currencyCode);
+  convert = (value, from, to) => convert(value).from(from).to(to);
   getOptimizedIngredientQuantityMap = (billComposition, products) => {
     return billComposition.reduce((acc, { id: productId, quantity: productQuantity }) => {
       const product = products.filter(({ id }) => id === productId)[0];
