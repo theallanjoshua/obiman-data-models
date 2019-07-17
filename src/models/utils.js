@@ -47,10 +47,7 @@ export default class Utils {
     const replenishedIngredients = this.getInventoryModifiedIngredients(ingredients, optimizedIngredientQuantityMapToReplenish, true);
     const ingredientsWithReplenishedIngredients = ingredients.map(ingredient => replenishedIngredients.filter(({ id }) => ingredient.id === id)[0] || ingredient);
     const subtractedIngredients = this.getInventoryModifiedIngredients(ingredientsWithReplenishedIngredients, optimizedIngredientQuantityMapToSubtract);
-    return replenishedIngredients.reduce((acc, item) => {
-      const replenishedIngredient = acc.filter(({ id }) => item.id === id)[0];
-      return replenishedIngredient ? [ ...acc, replenishedIngredient ] : [ ...acc ];
-    }, subtractedIngredients);
+    return replenishedIngredients.reduce((acc, item) => !acc.filter(({ id }) => item.id === id).length ? [ ...acc, item ] : [ ...acc ], subtractedIngredients);
   }
   getInsufficientInventoryIngredients = ingredients => ingredients.filter(({ quantity }) => quantity < 0).map(({ label }) => label);
 }
