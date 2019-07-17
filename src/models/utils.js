@@ -12,7 +12,7 @@ export default class Utils {
   getCurrencyCodes = () => Array.from(new Set(Object.keys(currencyToSymbolMap)));
   getCurrencySymbol = currencyCode => getSymbolFromCurrency(currencyCode);
   convert = (value, from, to) => convert(value).from(from).to(to);
-  getOptimizedIngredientQuantityMap = (billComposition, products) => {
+  getOptimizedIngredientQuantityMap = (billComposition = [], products = []) => {
     return billComposition.reduce((acc, { id: productId, quantity: productQuantity }) => {
       const product = products.filter(({ id }) => id === productId)[0];
       const { composition: productComposition } = product;
@@ -25,7 +25,7 @@ export default class Utils {
       }, acc);
     }, {});
   }
-  getInventoryModifiedIngredients = (ingredients, ingredientQuantityMap, isReplenish = false) => {
+  getInventoryModifiedIngredients = (ingredients = [], ingredientQuantityMap = {}, isReplenish = false) => {
     return ingredients
     .filter(({ id }) => !!ingredientQuantityMap[id])
     .map(item => {
@@ -40,7 +40,7 @@ export default class Utils {
         .get();
     });
   }
-  getIngredientsToUpdate = (ingredients, products, incomingBillComposition, existingBillComposition) => {
+  getIngredientsToUpdate = (ingredients = [], products = [], incomingBillComposition = [], existingBillComposition = []) => {
     const productsToRemove = existingBillComposition.filter(({ id, quantity }) => !incomingBillComposition.filter(entity => entity.id === id && entity.quantity === quantity).length);
     const productsToAdd = incomingBillComposition.filter(({ id, quantity }) => !existingBillComposition.filter(entity => entity.id === id && entity.quantity === quantity).length);
     const optimizedIngredientQuantityMapToReplenish = this.getOptimizedIngredientQuantityMap(productsToRemove, products);
@@ -50,5 +50,5 @@ export default class Utils {
     const subtractedIngredients = this.getInventoryModifiedIngredients(ingredientsWithReplenishedIngredients, optimizedIngredientQuantityMapToSubtract);
     return replenishedIngredients.reduce((acc, item) => !acc.filter(({ id }) => item.id === id).length ? [ ...acc, item ] : [ ...acc ], subtractedIngredients);
   }
-  getInsufficientInventoryIngredients = ingredients => ingredients.filter(({ quantity }) => quantity < 0).map(({ label }) => label);
+  getInsufficientInventoryIngredients = (ingredients = []) => ingredients.filter(({ quantity }) => quantity < 0).map(({ label }) => label);
 }

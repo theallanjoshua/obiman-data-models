@@ -10,8 +10,6 @@ export default class Product {
       description,
       image,
       composition,
-      lowInventoryIngredients,
-      maxRepetition,
       recipe,
       price,
       currency,
@@ -25,8 +23,6 @@ export default class Product {
     this.description = description || '';
     this.image = image || '';
     this.composition = (composition || []).map(item => new ProductCompositionEntity(item).get());
-    this.lowInventoryIngredients = lowInventoryIngredients || [];
-    this.maxRepetition = maxRepetition || 0;
     this.recipe = recipe || '';
     this.price = price || 0;
     this.currency = currency || '';
@@ -45,8 +41,6 @@ export default class Product {
   setDescription = description => this.set('description', description);
   setImage = image => this.set('image', image);
   setComposition = composition => this.set('composition', composition);
-  setLowInventoryIngredients = lowInventoryIngredients => this.set('lowInventoryIngredients', lowInventoryIngredients);
-  setMaxRepetition = maxRepetition => this.set('maxRepetition', maxRepetition);
   setRecipe = recipe => this.set('recipe', recipe);
   setPrice = price => this.set('price', price);
   setCurrency = currency => this.set('currency', currency);
