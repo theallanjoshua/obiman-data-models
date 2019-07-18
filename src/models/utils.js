@@ -33,7 +33,7 @@ export default class Utils {
       const { id, quantity: existingQuantity, unit, version } = ingredient.get();
       const { quantity: incomingQuantity, unit: incomingUnit } = ingredientQuantityMap[id];
       const normalizedQuantity = convert(incomingQuantity).from(incomingUnit).to(unit);
-      const quantity = isReplenish ? existingQuantity + normalizedQuantity : existingQuantity - normalizedQuantity;
+      const quantity = Math.round((isReplenish ? existingQuantity + normalizedQuantity : existingQuantity - normalizedQuantity) * 100) / 100;
       return ingredient
         .setQuantity(quantity)
         .setVersion(version + 1)

@@ -10,8 +10,6 @@ export default class Ingredient {
       unit,
       cost,
       currency,
-      thresholdQuantity,
-      thresholdUnit,
       expiryDate,
       createdDate,
       updatedDate,
@@ -23,8 +21,6 @@ export default class Ingredient {
     this.unit = unit || '';
     this.cost = cost || 0;
     this.currency = currency || '';
-    this.thresholdQuantity = thresholdQuantity || 0;
-    this.thresholdUnit = thresholdUnit || '';
     this.expiryDate = expiryDate || 0;
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
@@ -41,8 +37,6 @@ export default class Ingredient {
   setUnit = unit => this.set('unit', unit);
   setCost = cost => this.set('cost', cost);
   setCurrency = currency => this.set('currency', currency);
-  setThresholdQuantity = thresholdQuantity => this.set('thresholdQuantity', thresholdQuantity);
-  setThresholdUnit = thresholdUnit => this.set('thresholdUnit', thresholdUnit);
   setExpiryDate = expiryDate => this.set('expiryDate', expiryDate);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
@@ -52,7 +46,6 @@ export default class Ingredient {
     const labelErrors = !this.label.trim() ? { label: ['Name of the ingredient cannot be empty' ] } : {};
     const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
     const costCurrencyErrors = costCurrencyValidation('cost', 'Cost', this.cost, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
-    const thresholdQuantityUnitErrors = quantityUnitValidation('thresholdQuantity', 'Threshold quantity', this.thresholdQuantity, 'thresholdUnit', 'Threshold unit', this.thresholdUnit, utils.getUnits());
-    return { ...labelErrors, ...quantityUnitErrors, ...costCurrencyErrors, ...thresholdQuantityUnitErrors };
+    return { ...labelErrors, ...quantityUnitErrors, ...costCurrencyErrors };
   }
 }
