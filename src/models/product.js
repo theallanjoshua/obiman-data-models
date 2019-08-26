@@ -16,6 +16,8 @@ export default class Product {
       tax,
       createdDate,
       updatedDate,
+      createdBy,
+      updatedBy,
       version
     } = { ...product };
     this.id = id || '';
@@ -29,6 +31,8 @@ export default class Product {
     this.tax = tax || [];
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
+    this.createdBy = createdBy || '';
+    this.updatedBy = updatedBy || '';
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
@@ -47,14 +51,16 @@ export default class Product {
   setTax = tax => this.set('tax', tax);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
+  setCreatedBy = createdBy => this.set('createdBy', createdBy);
+  setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
   validate = () => {
     const utils = new Utils();
-    const labelErrors = !this.label.trim() ? { label: ['Name of the product cannot be empty' ] } : {};
+    const labelErrors = !this.label.trim() ? { label: [ 'Name of the product cannot be empty' ] } : {};
     const compositionErrors = this.composition.reduce((acc, item) => {
       const productCompositionEntity = new ProductCompositionEntity(item);
       const validationErrors = productCompositionEntity.validate();
-      return Object.keys(validationErrors).length ? { ...acc, composition: ['Composition has errors'] } : { ...acc };
+      return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
     const priceCurrencyErrors = costCurrencyValidation('price', 'Selling price', this.price, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
     return { ...labelErrors, ...compositionErrors, ...priceCurrencyErrors };

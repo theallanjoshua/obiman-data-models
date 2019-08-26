@@ -13,6 +13,8 @@ export default class Ingredient {
       expiryDate,
       createdDate,
       updatedDate,
+      createdBy,
+      updatedBy,
       version
     } = { ...ingredient };
     this.id = id || '';
@@ -24,6 +26,8 @@ export default class Ingredient {
     this.expiryDate = expiryDate || 0;
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
+    this.createdBy = createdBy || '';
+    this.updatedBy = updatedBy || '';
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
@@ -40,10 +44,12 @@ export default class Ingredient {
   setExpiryDate = expiryDate => this.set('expiryDate', expiryDate);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
+  setCreatedBy = createdBy => this.set('createdBy', createdBy);
+  setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
   validate = () => {
     const utils = new Utils();
-    const labelErrors = !this.label.trim() ? { label: ['Name of the ingredient cannot be empty' ] } : {};
+    const labelErrors = !this.label.trim() ? { label: [ 'Name of the ingredient cannot be empty' ] } : {};
     const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
     const costCurrencyErrors = costCurrencyValidation('cost', 'Cost', this.cost, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
     return { ...labelErrors, ...quantityUnitErrors, ...costCurrencyErrors };

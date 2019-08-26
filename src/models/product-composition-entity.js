@@ -25,7 +25,7 @@ export default class ProductCompositionEntity {
   setUnit = unit => this.set('unit', unit);
   validate = () => {
     const utils = new Utils();
-    const ingredientErrors = !this.id ? { id: ['Name of the ingredient cannot be empty' ] } : {};
+    const ingredientErrors = !this.id ? { id: [ 'Name of the ingredient cannot be empty' ] } : {};
     const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits(), true);
     return { ...ingredientErrors, ...quantityUnitErrors };
   }

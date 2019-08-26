@@ -1,24 +1,20 @@
-import BillCompositionEntity from './bill-composition-entity';
+import Utils from './utils';
 
-export default class Bill {
-  constructor(bill){
+export default class Business {
+  constructor(business){
     const {
       id,
       label,
-      composition,
-      status,
-      total,
+      currency,
       createdDate,
       updatedDate,
       createdBy,
       updatedBy,
       version
-    } = { ...bill };
+    } = { ...business };
     this.id = id || '';
     this.label = label || '';
-    this.composition = (composition || []).map(item => new BillCompositionEntity(item).get());
-    this.status = status || '';
-    this.total = total || 0;
+    this.currency = currency || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -32,21 +28,20 @@ export default class Bill {
   }
   setId = id => this.set('id', id);
   setLabel = label => this.set('label', label);
-  setComposition = composition => this.set('composition', composition);
-  setStatus = status => this.set('status', status);
-  setTotal = total => this.set('total', total);
+  setCurrency = currency => this.set('currency', currency);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
   setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
   validate = () => {
-    const labelErrors = !this.label.trim() ? { label: [ 'Name of the bill cannot be empty' ] } : {};
-    const compositionErrors = this.composition.reduce((acc, item) => {
-      const billCompositionEntity = new BillCompositionEntity(item);
-      const validationErrors = billCompositionEntity.validate();
-      return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
-    }, {});
-    return { ...labelErrors, ...compositionErrors };
+    const utils = new Utils();
+    const labelErrors = !this.label.trim() ? { label: [ 'Name of the business cannot be empty' ] } : {};
+    const currencyErrors = !this.currency.trim() ? { currency: [ 'Currency code for the business cannot be empty' ] } :
+      !utils
+        .getCurrencyCodes()
+        .filter(value => this.currency === value)
+        .length ? { currency: 'Please select a valid currency code' } : {};
+    return { ...labelErrors, ...currencyErrors };
   }
 }
