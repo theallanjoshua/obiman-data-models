@@ -1,11 +1,10 @@
-import Profile from './profile';
-
 export default class User {
   constructor(user){
     const {
       id,
-      name,
-      profiles,
+      label,
+      avatar,
+      businesses,
       createdDate,
       updatedDate,
       createdBy,
@@ -13,8 +12,9 @@ export default class User {
       version
     } = { ...user };
     this.id = id || '';
-    this.name = name || '';
-    this.profiles = profiles || [];
+    this.label = label || '';
+    this.avatar = avatar || '';
+    this.businesses = businesses || [];
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -27,18 +27,12 @@ export default class User {
     return this;
   }
   setId = id => this.set('id', id);
-  setName = name => this.set('name', name);
-  setProfiles = profiles => this.set('profiles', profiles);
+  setLabel = label => this.set('label', label);
+  setAvatar = avatar => this.set('avatar', avatar);
+  setBusinesses = businesses => this.set('businesses', businesses);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
   setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
-  validate = () => {
-    const profilesErrors = this.profiles.reduce((acc, item) => {
-      const profileErrors = new Profile(item).validate();
-      return profileErrors ? { ...acc, profiles: [ 'Profiles has errors' ] } : { ...acc };
-    }, {})
-    return { ...profilesErrors };
-  }
 }
