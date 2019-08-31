@@ -28,6 +28,7 @@ export default class Business {
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getSudoRoleText = () => 'OWNER';
+  getRoles = () => [this.getSudoRoleText(), 'INGREDIENT MANAGER', 'PRODUCT MANAGER', 'INVOICE MANAGER'];
   set = (key, value) => {
     this[key] = value;
     return this;
