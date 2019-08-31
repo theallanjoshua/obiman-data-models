@@ -1,10 +1,10 @@
-export { default as Ingredient } from './models/ingredient';
-export { default as Product } from './models/product';
-export { default as ProductCompositionEntity } from './models/product-composition-entity';
-export { default as Bill } from './models/bill';
 export { default as BillCompositionEntity } from './models/bill-composition-entity';
+export { default as Bill } from './models/bill';
 export { default as Business } from './models/business';
-export { default as Profile } from './models/profile';
-export { default as User } from './models/user';
+export { default as Employee } from './models/employee';
+export { default as Ingredient } from './models/ingredient';
+export { default as ProductCompositionEntity } from './models/product-composition-entity';
+export { default as Product } from './models/product';
 export { default as Response } from './models/response';
+export { default as User } from './models/user';
 export { default as Utils } from './models/utils';
