@@ -30,15 +30,21 @@ export default class Business {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
-  getWritePermissionText = () => 'Can edit business';
+  getUpdatePermissionText = () => 'edit business';
   getAllPermissions = () => [
-    this.getWritePermissionText(),
+    this.getUpdatePermissionText(),
+    new Ingredient().getCreatePermissionText(),
     new Ingredient().getReadPermissionText(),
-    new Ingredient().getWritePermissionText(),
+    new Ingredient().getUpdatePermissionText(),
+    new Ingredient().getDeletePermissionText(),
+    new Product().getCreatePermissionText(),
     new Product().getReadPermissionText(),
-    new Product().getWritePermissionText(),
+    new Product().getUpdatePermissionText(),
+    new Product().getDeletePermissionText(),
+    new Bill().getCreatePermissionText(),
     new Bill().getReadPermissionText(),
-    new Bill().getWritePermissionText(),
+    new Bill().getUpdatePermissionText(),
+    new Bill().getDeletePermissionText(),
   ];
   set = (key, value) => {
     this[key] = value;
@@ -62,13 +68,13 @@ export default class Business {
         .getCurrencyCodes()
         .filter(value => this.currency === value)
         .length ? { currency: 'Please select a valid currency code' } : {};
-    const writePermissionText = this.getWritePermissionText();
+    const updatePermissionText = this.getUpdatePermissionText();
     const employeesErrors = this.employees.reduce((acc, item) => {
       const employee = new Employee(item);
       const validationErrors = employee.validate();
       return Object.keys(validationErrors).length ? { ...acc, employees: [ 'Employees have errors' ] } : { ...acc };
     }, {
-      ...!this.employees.filter(({ permissions }) => permissions.includes(writePermissionText)).length ? { employees: [ `Minimum one user with permission ${writePermissionText} must be present` ] } : {}
+      ...!this.employees.filter(({ permissions }) => permissions.includes(updatePermissionText)).length ? { employees: [ `Minimum one user with permission ${updatePermissionText} must be present` ] } : {}
     });
     return { ...labelErrors, ...currencyErrors, ...employeesErrors };
   }

@@ -26,8 +26,10 @@ export default class Bill {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
-  getReadPermissionText = () => 'Can view bills';
-  getWritePermissionText = () => 'Can add, edit and delete bills';
+  getCreatePermissionText = () => 'create bills';
+  getReadPermissionText = () => 'view bills';
+  getUpdatePermissionText = () => 'edit bills';
+  getDeletePermissionText = () => 'delete bills';
   set = (key, value) => {
     this[key] = value;
     return this;
