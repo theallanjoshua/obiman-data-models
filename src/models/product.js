@@ -36,6 +36,8 @@ export default class Product {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
+  getReadPermissionText = () => 'Can view products';
+  getWritePermissionText = () => 'Can add, edit and delete products';
   set = (key, value) => {
     this[key] = value;
     return this;

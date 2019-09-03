@@ -1,5 +1,8 @@
 import Utils from './utils';
 import Employee from './employee';
+import Ingredient from './ingredient';
+import Product from './product';
+import Bill from './bill';
 
 export default class Business {
   constructor(business){
@@ -27,15 +30,15 @@ export default class Business {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
-  getSudoPermissionText = () => 'Can edit business';
+  getWritePermissionText = () => 'Can edit business';
   getAllPermissions = () => [
-    this.getSudoPermissionText(),
-    'Can view ingredients',
-    'Can add, edit and delete ingredients',
-    'Can view products',
-    'Can add, edit and delete products',
-    'Can view bills',
-    'Can add and edit bills',
+    this.getWritePermissionText(),
+    new Ingredient().getReadPermissionText(),
+    new Ingredient().getWritePermissionText(),
+    new Product().getReadPermissionText(),
+    new Product().getWritePermissionText(),
+    new Bill().getReadPermissionText(),
+    new Bill().getWritePermissionText(),
   ];
   set = (key, value) => {
     this[key] = value;
@@ -59,13 +62,13 @@ export default class Business {
         .getCurrencyCodes()
         .filter(value => this.currency === value)
         .length ? { currency: 'Please select a valid currency code' } : {};
-    const sudoPermissionText = this.getSudoPermissionText();
+    const writePermissionText = this.getWritePermissionText();
     const employeesErrors = this.employees.reduce((acc, item) => {
       const employee = new Employee(item);
       const validationErrors = employee.validate();
       return Object.keys(validationErrors).length ? { ...acc, employees: [ 'Employees have errors' ] } : { ...acc };
     }, {
-      ...!this.employees.filter(({ permissions }) => permissions.includes(sudoPermissionText)).length ? { employees: [ `Minimum one user with permission ${sudoPermissionText} must be present` ] } : {}
+      ...!this.employees.filter(({ permissions }) => permissions.includes(writePermissionText)).length ? { employees: [ `Minimum one user with permission ${writePermissionText} must be present` ] } : {}
     });
     return { ...labelErrors, ...currencyErrors, ...employeesErrors };
   }
