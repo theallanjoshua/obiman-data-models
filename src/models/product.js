@@ -1,6 +1,5 @@
-import Utils from './utils';
-import { costCurrencyValidation } from '../utils/validation';
 import ProductCompositionEntity from './product-composition-entity';
+import { numberValidation } from '../utils/validation';
 
 export default class Product {
   constructor(product){
@@ -12,7 +11,6 @@ export default class Product {
       composition,
       recipe,
       price,
-      currency,
       tax,
       createdDate,
       updatedDate,
@@ -27,7 +25,6 @@ export default class Product {
     this.composition = (composition || []).map(item => new ProductCompositionEntity(item).get());
     this.recipe = recipe || '';
     this.price = price || 0;
-    this.currency = currency || '';
     this.tax = tax || [];
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
@@ -51,7 +48,6 @@ export default class Product {
   setComposition = composition => this.set('composition', composition);
   setRecipe = recipe => this.set('recipe', recipe);
   setPrice = price => this.set('price', price);
-  setCurrency = currency => this.set('currency', currency);
   setTax = tax => this.set('tax', tax);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
@@ -59,14 +55,13 @@ export default class Product {
   setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
   validate = () => {
-    const utils = new Utils();
     const labelErrors = !this.label.trim() ? { label: [ 'Name of the product cannot be empty' ] } : {};
     const compositionErrors = this.composition.reduce((acc, item) => {
       const productCompositionEntity = new ProductCompositionEntity(item);
       const validationErrors = productCompositionEntity.validate();
       return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
-    const priceCurrencyErrors = costCurrencyValidation('price', 'Selling price', this.price, 'currency', 'Currency', this.currency, utils.getCurrencyCodes());
-    return { ...labelErrors, ...compositionErrors, ...priceCurrencyErrors };
+    const priceErrors = numberValidation('price', 'Price', this.price, true);
+    return { ...labelErrors, ...compositionErrors, ...priceErrors };
   }
 }

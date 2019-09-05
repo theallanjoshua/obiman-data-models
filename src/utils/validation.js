@@ -1,27 +1,27 @@
-const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownKey, dropdownLabel, dropdownValue, dropdownValues, isMandatory = false) => {
-  let errors = {};
-  if(isMandatory && !numberValue) {
-    errors[numberKey] = [ ...(errors[numberKey] || []), `${numberLabel} cannot be empty` ]
+export const numberValidation = (key, label, value, isMandatory = false) => {
+  const errors = {};
+  if(isMandatory && !value) {
+    errors[key] = [ ...(errors[key] || []), `${label} cannot be empty` ]
   }
-  if(isNaN(numberValue)) {
-    errors[numberKey] = [ ...(errors[numberKey] || []), `${numberLabel} has to be a number` ]
+  if(isNaN(value)) {
+    errors[key] = [ ...(errors[key] || []), `${label} has to be a number` ]
   }
-  if(numberValue < 0) {
-    errors[numberKey] = [ ...(errors[numberKey] || []), `${numberLabel} cannot be below 0` ]
+  if(value < 0) {
+    errors[key] = [ ...(errors[key] || []), `${label} cannot be below 0` ]
   }
+  return errors;
+}
+
+const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownKey, dropdownLabel, dropdownValue, dropdownValues, isMandatory) => {
+  const errors = {};
+  const numberErrors = numberValidation(numberKey, numberLabel, numberValue, isMandatory);
   if(numberValue && !dropdownValue.trim()) {
     errors[dropdownKey] = [ ...(errors[dropdownKey] || []), `${dropdownLabel} cannot be empty when ${numberLabel.toLowerCase()} is entered` ]
   }
   if(numberValue && !dropdownValues.filter(value => value === dropdownValue).length) {
     errors[dropdownKey] = [ ...(errors[dropdownKey] || []), `Invalid ${dropdownLabel.toLowerCase()}. Please select valid ${dropdownLabel.toLowerCase()} from dropdown` ]
   }
-  return { ...errors };
+  return { ...errors, ...numberErrors };
 }
 
-export const quantityUnitValidation = (quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits, isMandatory) => {
-  return numberDropdownValidation(quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits, isMandatory);
-}
-
-export const costCurrencyValidation = (costKey, costLabel, costValue, currencyKey, currencyLabel, currencyValue, validCurrencies, isMandatory) => {
-  return numberDropdownValidation(costKey, costLabel, costValue, currencyKey, currencyLabel, currencyValue, validCurrencies, isMandatory);
-}
+export const quantityUnitValidation = (quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits, isMandatory) => numberDropdownValidation(quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits, isMandatory);
