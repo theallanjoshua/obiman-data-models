@@ -30,12 +30,10 @@ export default class Bill {
   getReadPermissionText = () => 'view bills';
   getUpdatePermissionText = () => 'edit bills';
   getDeletePermissionText = () => 'delete bills';
-  calculateTotal = products => {
-    this.composition.reduce((acc, { id, quantity }) => {
-      const { price } = products.filter(({ id: productId }) => id === productId)[0] || { price: 0 };
-      return acc + (price * quantity);
-    }, 0)
-  }
+  calculateTotal = products => this.composition.reduce((acc, { id, quantity }) => {
+    const { price } = products.filter(({ id: productId }) => id === productId)[0] || { price: 0 };
+    return acc + (price * quantity);
+  }, 0);
   set = (key, value) => {
     this[key] = value;
     return this;
