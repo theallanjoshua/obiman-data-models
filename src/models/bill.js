@@ -63,7 +63,7 @@ export default class Bill {
         .setPrice(price)
         .setTax(tax)
         .get();
-    })
+    });
     // Enrich tax metadata
     this.tax = this.composition.reduce((acc, { id, quantity }) => {
       const { price, tax } = products.filter(({ id: productId }) => id === productId)[0] || product;
@@ -75,7 +75,7 @@ export default class Bill {
       }, acc);
     }, {});
     // Enrich tax amount
-    this.taxAmount = Object.values(tax).reduce((acc, item) => acc + item, 0);
+    this.taxAmount = Object.values(this.tax).reduce((acc, item) => acc + item, 0);
     this.taxlessTotal = this.composition.reduce((acc, { id, quantity }) => {
       const { price } = products.filter(({ id: productId }) => id === productId)[0] || product;
       const calculatedPrice = price * quantity;
