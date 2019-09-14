@@ -1,4 +1,3 @@
-import { numberValidation } from '../utils/validation';
 import Tax from './tax';
 
 export default class BillCompositionEntity {
@@ -29,6 +28,6 @@ export default class BillCompositionEntity {
   validate = () => {
     const productErrors = !this.id ? { id: ['Name of the product cannot be empty' ] } : {};
     const quantityErrors = !this.quantity ? { quantity: ['Quantity cannot be zero' ] } : {};
-    return { ...productErrors, ...quantityErrors, ...priceErrors, ...taxErrors };
+    return { ...productErrors, ...quantityErrors };
   }
 }
