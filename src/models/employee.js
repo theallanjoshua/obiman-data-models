@@ -15,7 +15,7 @@ export default class Employee {
   setId = id => this.set('id', id);
   setPermissions = permissions => this.set('permissions', permissions);
   validate = () => {
-    const idErrors = !this.id.trim() ? { id: [ 'Email cannot be empty' ] } : {};
+    const idErrors = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(this.id) ? { id: [ 'Invalid email' ] } : {};
     const permissionsErrors = !this.permissions.length ? { permissions: [ 'Permissions cannot be empty' ] } : {};
     return { ...idErrors, ...permissionsErrors };
   }

@@ -69,13 +69,13 @@ export default class Business {
         .filter(value => this.currency === value)
         .length ? { currency: 'Please select a valid currency code' } : {};
     const updatePermissionText = this.getUpdatePermissionText();
+    const sudoEmployeeError = !this.employees.filter(({ permissions }) => permissions.includes(updatePermissionText)).length ? [ `Minimum one user with permission ${updatePermissionText} must be present` ] : [];
+    const duplicateEmployeesError = !this.employees.map(({ id }) => id).filter((id, index, array) => array.includes(id)).length > 1 ? [ `Some emails are used more than once` ]: [];
     const employeesErrors = this.employees.reduce((acc, item) => {
       const employee = new Employee(item);
       const validationErrors = employee.validate();
       return Object.keys(validationErrors).length ? { ...acc, employees: [ 'Employees have errors' ] } : { ...acc };
-    }, {
-      ...!this.employees.filter(({ permissions }) => permissions.includes(updatePermissionText)).length ? { employees: [ `Minimum one user with permission ${updatePermissionText} must be present` ] } : {}
-    });
+    }, { employees: [ ...sudoEmployeeError, ...duplicateEmployeesError ] });
     return { ...labelErrors, ...currencyErrors, ...employeesErrors };
   }
 }

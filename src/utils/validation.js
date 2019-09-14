@@ -1,4 +1,4 @@
-export const numberValidation = (key, label, value, isMandatory = false) => {
+export const numberValidation = (key, label, value, isMandatory = false, min = 0, max) => {
   const errors = {};
   if(isMandatory && !value) {
     errors[key] = [ ...(errors[key] || []), `${label} cannot be empty` ]
@@ -6,8 +6,11 @@ export const numberValidation = (key, label, value, isMandatory = false) => {
   if(isNaN(value)) {
     errors[key] = [ ...(errors[key] || []), `${label} has to be a number` ]
   }
-  if(value < 0) {
-    errors[key] = [ ...(errors[key] || []), `${label} cannot be below 0` ]
+  if(value < min) {
+    errors[key] = [ ...(errors[key] || []), `${label} cannot be below ${min}` ]
+  }
+  if(max && value > max) {
+    errors[key] = [ ...(errors[key] || []), `${label} cannot be above ${max}` ]
   }
   return errors;
 }

@@ -1,4 +1,5 @@
 import ProductCompositionEntity from './product-composition-entity';
+import Tax from './tax';
 import { numberValidation } from '../utils/validation';
 
 export default class Product {
@@ -25,7 +26,7 @@ export default class Product {
     this.composition = (composition || []).map(item => new ProductCompositionEntity(item).get());
     this.recipe = recipe || '';
     this.price = price || 0;
-    this.tax = tax || [];
+    this.tax = (tax || []).map(item => new Tax(item).get());
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -62,6 +63,11 @@ export default class Product {
       return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
     const priceErrors = numberValidation('price', 'Price', this.price, true);
-    return { ...labelErrors, ...compositionErrors, ...priceErrors };
+    const taxErrors = this.tax.reduce((acc, item) => {
+      const tax = new Tax(item);
+      const validationErrors = tax.validate();
+      return Object.keys(validationErrors).length ? { ...acc, tax: [ 'Tax has errors' ] } : { ...acc };
+    }, {});
+    return { ...labelErrors, ...compositionErrors, ...priceErrors, ...taxErrors };
   }
 }

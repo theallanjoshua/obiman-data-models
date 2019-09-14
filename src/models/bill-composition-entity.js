@@ -1,13 +1,19 @@
+import Tax from './tax';
+
 export default class BillCompositionEntity {
   constructor(billCompositionEntity){
     const {
       id,
       label,
-      quantity
+      quantity,
+      price,
+      tax
     } = { ...billCompositionEntity };
     this.id = id || '';
     this.label = label || '';
     this.quantity = quantity || 0;
+    this.price = price || 0;
+    this.tax = (tax || []).map(item => new Tax(item).get());
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   set = (key, value) => {
@@ -17,9 +23,13 @@ export default class BillCompositionEntity {
   setId = id => this.set('id', id);
   setLabel = label => this.set('label', label);
   setQuantity = quantity => this.set('quantity', quantity);
+  setPrice = price => this.set('price', price);
+  setTax = tax => this.set('tax', tax);
   validate = () => {
     const productErrors = !this.id ? { id: ['Name of the product cannot be empty' ] } : {};
     const quantityErrors = !this.quantity ? { quantity: ['Quantity cannot be zero' ] } : {};
-    return { ...productErrors, ...quantityErrors };
+    const priceErrors = numberValidation('price', 'Price', this.price, true);
+    const taxErrors  = numberValidation('tax', 'Tax', this.tax, true);
+    return { ...productErrors, ...quantityErrors, ...priceErrors, ...taxErrors };
   }
 }
