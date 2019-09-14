@@ -71,11 +71,12 @@ export default class Business {
     const updatePermissionText = this.getUpdatePermissionText();
     const sudoEmployeeError = !this.employees.filter(({ permissions }) => permissions.includes(updatePermissionText)).length ? [ `Minimum one user with permission ${updatePermissionText} must be present` ] : [];
     const duplicateEmployeesError = !this.employees.map(({ id }) => id).filter((id, index, array) => array.includes(id)).length > 1 ? [ `Some emails are used more than once` ]: [];
+    const initEmployeeErrors = sudoEmployeeError.length || duplicateEmployeesError.length ? { employees: [ ...sudoEmployeeError, ...duplicateEmployeesError ] } : {};
     const employeesErrors = this.employees.reduce((acc, item) => {
       const employee = new Employee(item);
       const validationErrors = employee.validate();
       return Object.keys(validationErrors).length ? { ...acc, employees: [ 'Employees have errors' ] } : { ...acc };
-    }, { employees: [ ...sudoEmployeeError, ...duplicateEmployeesError ] });
+    }, initEmployeeErrors);
     return { ...labelErrors, ...currencyErrors, ...employeesErrors };
   }
 }
