@@ -1,6 +1,6 @@
 {
   "name": "obiman-data-models",
-  "version": "1.0.48",
+  "version": "1.0.49",
   "description": "A collection of all data models utilized in Obiman",
   "files": [
     "lib"
