@@ -1,3 +1,4 @@
+import { numberValidation } from '../utils/validation';
 import Tax from './tax';
 
 export default class BillCompositionEntity {

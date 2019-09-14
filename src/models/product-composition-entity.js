@@ -1,5 +1,5 @@
 import Utils from './utils';
-import { quantityUnitValidation } from '../utils/validation';
+import { numberDropdownValidation } from '../utils/validation';
 
 export default class ProductCompositionEntity {
   constructor(productCompositionEntity){
@@ -26,7 +26,7 @@ export default class ProductCompositionEntity {
   validate = () => {
     const utils = new Utils();
     const ingredientErrors = !this.id ? { id: [ 'Name of the ingredient cannot be empty' ] } : {};
-    const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits(), true);
+    const quantityUnitErrors = numberDropdownValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits(), true);
     return { ...ingredientErrors, ...quantityUnitErrors };
   }
 }

@@ -1,3 +1,5 @@
+import { numberValidation } from '../utils/validation';
+
 export default class Tax {
   constructor(tax){
     const {

@@ -1,5 +1,5 @@
 import Utils from './utils';
-import { quantityUnitValidation } from '../utils/validation';
+import { numberDropdownValidation } from '../utils/validation';
 
 export default class Ingredient {
   constructor(ingredient) {
@@ -48,7 +48,7 @@ export default class Ingredient {
   validate = () => {
     const utils = new Utils();
     const labelErrors = !this.label.trim() ? { label: [ 'Name of the ingredient cannot be empty' ] } : {};
-    const quantityUnitErrors = quantityUnitValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
+    const quantityUnitErrors = numberDropdownValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
     return { ...labelErrors, ...quantityUnitErrors };
   }
 }

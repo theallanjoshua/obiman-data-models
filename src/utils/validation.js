@@ -15,7 +15,7 @@ export const numberValidation = (key, label, value, isMandatory = false, min = 0
   return errors;
 }
 
-const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownKey, dropdownLabel, dropdownValue, dropdownValues, isMandatory) => {
+export const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownKey, dropdownLabel, dropdownValue, dropdownValues, isMandatory) => {
   const errors = {};
   const numberErrors = numberValidation(numberKey, numberLabel, numberValue, isMandatory);
   if(numberValue && !dropdownValue.trim()) {
@@ -26,5 +26,3 @@ const numberDropdownValidation = (numberKey, numberLabel, numberValue, dropdownK
   }
   return { ...errors, ...numberErrors };
 }
-
-export const quantityUnitValidation = (quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits, isMandatory) => numberDropdownValidation(quantityKey, quantityLabel, quantityValue, unitKey, unitLabel, unitValue, validUnits, isMandatory);
