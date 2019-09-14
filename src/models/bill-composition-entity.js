@@ -29,8 +29,6 @@ export default class BillCompositionEntity {
   validate = () => {
     const productErrors = !this.id ? { id: ['Name of the product cannot be empty' ] } : {};
     const quantityErrors = !this.quantity ? { quantity: ['Quantity cannot be zero' ] } : {};
-    const priceErrors = numberValidation('price', 'Price', this.price, true);
-    const taxErrors  = numberValidation('tax', 'Tax', this.tax, true);
     return { ...productErrors, ...quantityErrors, ...priceErrors, ...taxErrors };
   }
 }
