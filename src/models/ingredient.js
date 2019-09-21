@@ -9,6 +9,9 @@ export default class Ingredient {
       quantity,
       unit,
       expiryDate,
+      location,
+      thresholdQuantity,
+      thresholdUnit,
       createdDate,
       updatedDate,
       createdBy,
@@ -20,6 +23,9 @@ export default class Ingredient {
     this.quantity = quantity || 0;
     this.unit = unit || '';
     this.expiryDate = expiryDate || 0;
+    this.location = location || '';
+    this.thresholdQuantity = thresholdQuantity || 0;
+    this.thresholdUnit = thresholdUnit || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -40,6 +46,9 @@ export default class Ingredient {
   setQuantity = quantity => this.set('quantity', quantity);
   setUnit = unit => this.set('unit', unit);
   setExpiryDate = expiryDate => this.set('expiryDate', expiryDate);
+  setLocation = location => this.set('location', location);
+  setThresholdQuantity = thresholdQuantity => this.set('thresholdQuantity', thresholdQuantity);
+  setThresholdUnit = thresholdUnit => this.set('thresholdUnit', thresholdUnit);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
@@ -49,6 +58,7 @@ export default class Ingredient {
     const utils = new Utils();
     const labelErrors = !this.label.trim() ? { label: [ 'Name of the ingredient cannot be empty' ] } : {};
     const quantityUnitErrors = numberDropdownValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
-    return { ...labelErrors, ...quantityUnitErrors };
+    const thresholdQuantityUnitErrors = numberDropdownValidation('thresholdQuantity', 'Threshold Quantity', this.thresholdQuantity, 'thresholdUnit', 'Threshold unit', this.thresholdUnit, utils.getUnits(), false);
+    return { ...labelErrors, ...quantityUnitErrors, ...thresholdQuantityUnitErrors };
   }
 }

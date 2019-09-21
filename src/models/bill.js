@@ -37,6 +37,9 @@ export default class Bill {
   getReadPermissionText = () => 'view bills';
   getUpdatePermissionText = () => 'edit bills';
   getDeletePermissionText = () => 'delete bills';
+  getStartState = () => 'Open';
+  getOtherStates = () => [];
+  getEndState = () => 'Closed';
   set = (key, value) => {
     this[key] = value;
     return this;
@@ -92,6 +95,7 @@ export default class Bill {
       const validationErrors = billCompositionEntity.validate();
       return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
-    return { ...labelErrors, ...compositionErrors };
+    const statusErrors = ![ this.getStartState(), ...this.getOtherStates(), this.getEndState() ].includes(this.status) ? { status: [ 'Invalid status' ] } : {};
+    return { ...labelErrors, ...compositionErrors, ...statusErrors };
   }
 }
