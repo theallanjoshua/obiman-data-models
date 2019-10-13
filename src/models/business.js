@@ -11,7 +11,7 @@ export default class Business {
       label,
       logo,
       address,
-      contacts,
+      contact,
       coordinates,
       currency,
       employees,
@@ -25,7 +25,7 @@ export default class Business {
     this.label = label || '';
     this.logo = logo || '';
     this.address = address || '';
-    this.contacts = contacts || [];
+    this.contact = contact || '';
     this.coordinates = coordinates || '';
     this.currency = currency || '';
     this.employees = (employees || []).map(item => new Employee(item).get());
@@ -60,7 +60,7 @@ export default class Business {
   setLabel = label => this.set('label', label);
   setLogo = logo => this.set('logo', logo);
   setAddress = address => this.set('address', address);
-  setContacts = contacts => this.set('contacts', contacts);
+  setContact = contact => this.set('contact', contact);
   setCoordinates = coordinates => this.set('coordinates', coordinates);
   setCurrency = currency => this.set('currency', currency);
   setEmployees = employees => this.set('employees', employees);
