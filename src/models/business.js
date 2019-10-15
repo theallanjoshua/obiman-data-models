@@ -3,6 +3,7 @@ import Employee from './employee';
 import Ingredient from './ingredient';
 import Product from './product';
 import Bill from './bill';
+import Contact from './contact';
 
 export default class Business {
   constructor(business){
@@ -11,7 +12,7 @@ export default class Business {
       label,
       logo,
       address,
-      contact,
+      contacts,
       coordinates,
       currency,
       employees,
@@ -25,7 +26,7 @@ export default class Business {
     this.label = label || '';
     this.logo = logo || '';
     this.address = address || '';
-    this.contact = contact || '';
+    this.contacts = (contacts || []).map(item => new Contact(item).get());
     this.coordinates = coordinates || '';
     this.currency = currency || '';
     this.employees = (employees || []).map(item => new Employee(item).get());
@@ -60,7 +61,7 @@ export default class Business {
   setLabel = label => this.set('label', label);
   setLogo = logo => this.set('logo', logo);
   setAddress = address => this.set('address', address);
-  setContact = contact => this.set('contact', contact);
+  setContacts = contacts => this.set('contacts', contacts);
   setCoordinates = coordinates => this.set('coordinates', coordinates);
   setCurrency = currency => this.set('currency', currency);
   setEmployees = employees => this.set('employees', employees);
@@ -86,6 +87,11 @@ export default class Business {
       const validationErrors = employee.validate();
       return Object.keys(validationErrors).length ? { ...acc, employees: [ 'Employees have errors' ] } : { ...acc };
     }, initEmployeeErrors);
-    return { ...labelErrors, ...currencyErrors, ...employeesErrors };
+    const contactErrors = this.contacts.reduce((acc, item) => {
+      const contact = new Contact(item);
+      const validationErrors = contact.validate();
+      return Object.keys(validationErrors).length ? { ...acc, employees: [ 'Contacts have errors' ] } : { ...acc };
+    }, {});
+    return { ...labelErrors, ...currencyErrors, ...employeesErrors, ...contactErrors };
   }
 }
