@@ -90,7 +90,7 @@ export default class Business {
     const contactErrors = this.contacts.reduce((acc, item) => {
       const contact = new Contact(item);
       const validationErrors = contact.validate();
-      return Object.keys(validationErrors).length ? { ...acc, employees: [ 'Contacts have errors' ] } : { ...acc };
+      return Object.keys(validationErrors).length ? { ...acc, contacts: [ 'Contacts have errors' ] } : { ...acc };
     }, {});
     return { ...labelErrors, ...currencyErrors, ...employeesErrors, ...contactErrors };
   }
