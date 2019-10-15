@@ -48,7 +48,7 @@ export default class Contact {
   setInfo = info => this.set('info', info);
   validate = () => {
     const typeErrors = !this.getTypes().map(({ id }) => id).includes(this.type) ? { type: [ 'Type of contact cannot be empty' ] } : {};
-    const infoErrors = !this.info && !Object.keys(typeErrors).length ? { info: this.getTypes().filter(({ id }) => id === this.type)[0].errorText } : {}
+    const infoErrors = !this.info && !Object.keys(typeErrors).length ? { info: [ this.getTypes().filter(({ id }) => id === this.type)[0].errorText ] } : {}
     return { ...typeErrors, ...infoErrors };
   }
 }
