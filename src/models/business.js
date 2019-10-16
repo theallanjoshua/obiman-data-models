@@ -85,10 +85,10 @@ export default class Business {
     const employeesErrors = this.employees.reduce((acc, item) => {
       const employee = new Employee(item);
       const validationErrors = employee.validate();
-      const { employees } = acc;
+      const { employees } = { employees: [], ...acc };
       const employeesErrorText = 'Employees have errors';
-      const errors = !employees.includes(employeesErrorText) ? [ ...employees, employeesErrorText ] : [ ...employees ];
-      return Object.keys(validationErrors).length ? { ...acc, employees: errors } : { ...acc };
+      const errors = Object.keys(validationErrors).length && !employees.includes(employeesErrorText) ? [ ...employees, employeesErrorText ] : [ ...employees ];
+      return errors.length ? { ...acc, employees: errors } : { ...acc };
     }, initEmployeeErrors);
     const contactErrors = this.contacts.reduce((acc, item) => {
       const contact = new Contact(item);
