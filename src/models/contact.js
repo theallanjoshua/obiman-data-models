@@ -21,22 +21,22 @@ export default class Contact {
     },
     { id: 'global',
       label: 'Website',
-      placeholder: 'Eg: https://wwww.theobiman.com',
+      placeholder: 'Eg: wwww.theobiman.com',
       errorText: 'Website cannot be empty'
     },
     { id: 'facebook',
       label: 'Facebook',
-      placeholder: 'Eg: https://www.facebook.com/theobiman',
+      placeholder: 'Eg: theobiman',
       errorText: 'Facebook page cannot be empty'
     },
     { id: 'instagram',
       label: 'Instagram',
-      placeholder: 'Eg: https://www.instagram.com/allanjoshua/',
+      placeholder: 'Eg: @theobiman',
       errorText: 'Instagram handle cannot be empty'
     },
     { id: 'twitter',
       label: 'Twitter',
-      placeholder: 'Eg: https://twitter.com/theobiman',
+      placeholder: 'Eg: @theobiman',
       errorText: 'Twitter cannot be empty'
     }
   ];
