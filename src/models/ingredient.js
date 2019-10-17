@@ -1,5 +1,8 @@
 import Utils from './utils';
-import { numberDropdownValidation } from '../utils/validation';
+import {
+  numberDropdownValidation,
+  numberValidation
+} from '../utils/validation';
 
 export default class Ingredient {
   constructor(ingredient) {
