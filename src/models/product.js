@@ -13,6 +13,7 @@ export default class Product {
       recipe,
       price,
       tax,
+      classification,
       createdDate,
       updatedDate,
       createdBy,
@@ -27,6 +28,7 @@ export default class Product {
     this.recipe = recipe || '';
     this.price = price || 0;
     this.tax = (tax || []).map(item => new Tax(item).get());
+    this.classification = classification || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -50,6 +52,7 @@ export default class Product {
   setRecipe = recipe => this.set('recipe', recipe);
   setPrice = price => this.set('price', price);
   setTax = tax => this.set('tax', tax);
+  setClassification = classification => this.set('classification', classification);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
