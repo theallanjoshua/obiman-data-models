@@ -68,7 +68,7 @@ export default class Ingredient {
     const labelErrors = !this.label.trim() ? { label: [ 'Name of the ingredient cannot be empty' ] } : {};
     const quantityUnitErrors = numberDropdownValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
     const thresholdQuantityUnitErrors = numberDropdownValidation('thresholdQuantity', 'Threshold Quantity', this.thresholdQuantity, 'thresholdUnit', 'Threshold unit', this.thresholdUnit, utils.getUnits(this.unit), false);
-    const costErrors = numberValidation('cost', 'cost', this.cost);
+    const costErrors = numberValidation('cost', 'cost', this.cost, true);
     return { ...labelErrors, ...quantityUnitErrors, ...thresholdQuantityUnitErrors, ...costErrors };
   }
 }

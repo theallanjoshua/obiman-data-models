@@ -16,6 +16,7 @@ export default class Business {
       coordinates,
       currency,
       employees,
+      metadata,
       createdDate,
       updatedDate,
       createdBy,
@@ -30,6 +31,7 @@ export default class Business {
     this.coordinates = coordinates || '';
     this.currency = currency || '';
     this.employees = (employees || []).map(item => new Employee(item).get());
+    this.metadata = metadata || {};
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -38,21 +40,26 @@ export default class Business {
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getUpdatePermissionText = () => 'edit business';
-  getAllPermissions = () => [
-    this.getUpdatePermissionText(),
-    new Ingredient().getCreatePermissionText(),
-    new Ingredient().getReadPermissionText(),
-    new Ingredient().getUpdatePermissionText(),
-    new Ingredient().getDeletePermissionText(),
-    new Product().getCreatePermissionText(),
-    new Product().getReadPermissionText(),
-    new Product().getUpdatePermissionText(),
-    new Product().getDeletePermissionText(),
-    new Bill().getCreatePermissionText(),
-    new Bill().getReadPermissionText(),
-    new Bill().getUpdatePermissionText(),
-    new Bill().getDeletePermissionText(),
-  ];
+  getAllPermissions = () => {
+    const ingredient = new Ingredient();
+    const product = new Product();
+    const bill = new Bill();
+    return [
+      this.getUpdatePermissionText(),
+      ingredient.getCreatePermissionText(),
+      ingredient.getReadPermissionText(),
+      ingredient.getUpdatePermissionText(),
+      ingredient.getDeletePermissionText(),
+      product.getCreatePermissionText(),
+      product.getReadPermissionText(),
+      product.getUpdatePermissionText(),
+      product.getDeletePermissionText(),
+      bill.getCreatePermissionText(),
+      bill.getReadPermissionText(),
+      bill.getUpdatePermissionText(),
+      bill.getDeletePermissionText(),
+    ]
+  };
   set = (key, value) => {
     this[key] = value;
     return this;
@@ -65,6 +72,7 @@ export default class Business {
   setCoordinates = coordinates => this.set('coordinates', coordinates);
   setCurrency = currency => this.set('currency', currency);
   setEmployees = employees => this.set('employees', employees);
+  setMetadata = metadata => this.set('metadata', metadata);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);

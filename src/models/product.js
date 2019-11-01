@@ -13,6 +13,7 @@ export default class Product {
       recipe,
       price,
       tax,
+      profit,
       classification,
       createdDate,
       updatedDate,
@@ -28,6 +29,7 @@ export default class Product {
     this.recipe = recipe || '';
     this.price = price || 0;
     this.tax = (tax || []).map(item => new Tax(item).get());
+    this.profit = profit || 0;
     this.classification = classification || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
@@ -52,6 +54,7 @@ export default class Product {
   setRecipe = recipe => this.set('recipe', recipe);
   setPrice = price => this.set('price', price);
   setTax = tax => this.set('tax', tax);
+  setProfit = profit => this.set('profit', profit);
   setClassification = classification => this.set('classification', classification);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
@@ -71,6 +74,7 @@ export default class Product {
       const validationErrors = tax.validate();
       return Object.keys(validationErrors).length ? { ...acc, tax: [ 'Tax has errors' ] } : { ...acc };
     }, {});
-    return { ...labelErrors, ...compositionErrors, ...priceErrors, ...taxErrors };
+    const profitErrors = numberValidation('profit', 'Profit', this.profit, true);
+    return { ...labelErrors, ...compositionErrors, ...priceErrors, ...taxErrors, ...profitErrors };
   }
 }

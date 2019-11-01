@@ -6,6 +6,7 @@ export default class Bill {
     const {
       id,
       label,
+      source,
       composition,
       customer,
       status,
@@ -13,6 +14,7 @@ export default class Bill {
       tax,
       taxAmount,
       total,
+      profit,
       createdDate,
       updatedDate,
       createdBy,
@@ -21,6 +23,7 @@ export default class Bill {
     } = { ...bill };
     this.id = id || '';
     this.label = label || '';
+    this.source = source || '';
     this.composition = (composition || []).map(item => new BillCompositionEntity(item).get());
     this.customer = customer || '';
     this.status = status || '';
@@ -28,6 +31,7 @@ export default class Bill {
     this.tax = tax || {};
     this.taxAmount = taxAmount || 0;
     this.total = total || 0;
+    this.profit = profit || 0;
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -48,6 +52,7 @@ export default class Bill {
   }
   setId = id => this.set('id', id);
   setLabel = label => this.set('label', label);
+  setSource = source => this.set('source', source);
   setComposition = composition => this.set('composition', composition);
   setCustomer = customer => this.set('customer', customer);
   setStatus = status => this.set('status', status);
@@ -63,11 +68,12 @@ export default class Bill {
       const billCompositionEntity = new BillCompositionEntity(item);
       const billCompositionEntityData = billCompositionEntity.get();
       const { id } = billCompositionEntityData;
-      const { label, price, tax } = products.filter(({ id: productId }) => id === productId)[0] || product;
+      const { label, price, tax, profit } = products.filter(({ id: productId }) => id === productId)[0] || product;
       return billCompositionEntity
         .setLabel(label)
         .setPrice(price)
         .setTax(tax)
+        .setProfit(profit)
         .get();
     });
     // Enrich tax metadata
@@ -89,6 +95,8 @@ export default class Bill {
     }, 0);
     // Enrich total bill amount
     this.total = this.taxlessTotal + this.taxAmount;
+    // Enrich profit
+    this.profit = this.composition.reduce((acc, { profit }) => acc + profit, 0);
     return this;
   }
   validate = () => {
