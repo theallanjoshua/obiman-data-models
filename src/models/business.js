@@ -106,7 +106,7 @@ export default class Business {
     const metadataErrors = Object.keys(this.metadata).reduce((acc, key) => {
       const metadataItems = this.metadata[key];
       const emptyMetadataItemsErrors = metadataItems.filter(item => !item).length ? [ 'Cannot have empty values' ] : [];
-      const duplicateMetadataItemsErrors = metadataItems.filter(({ id }, index, array) => array.filter(employee => employee.id === id).length > 1).length ? [ 'Some values are used more than once' ]: [];
+      const duplicateMetadataItemsErrors = metadataItems.filter((metadataItem, index, array) => array.filter(item => item === metadataItem).length > 1).length ? [ 'Some values are used more than once' ]: [];
       const errors = [ ...emptyMetadataItemsErrors, duplicateMetadataItemsErrors ];
       return errors ? { ...acc, [key]: errors } : { ...acc };
     }, {});
