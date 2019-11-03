@@ -108,7 +108,7 @@ export default class Business {
       const emptyMetadataItemsErrors = metadataItems.filter(item => !item).length ? [ 'Cannot have empty values' ] : [];
       const duplicateMetadataItemsErrors = metadataItems.filter((metadataItem, index, array) => array.filter(item => item === metadataItem).length > 1).length ? [ 'Some values are used more than once' ]: [];
       const errors = [ ...emptyMetadataItemsErrors, duplicateMetadataItemsErrors ];
-      return errors ? { ...acc, [key]: errors } : { ...acc };
+      return errors.length ? { ...acc, [key]: errors } : { ...acc };
     }, {});
     return { ...labelErrors, ...currencyErrors, ...employeesErrors, ...contactErrors, ...(Object.keys(metadataErrors).length ? { metadata: { ...metadataErrors } } : {}) };
   }
