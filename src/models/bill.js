@@ -101,12 +101,13 @@ export default class Bill {
   }
   validate = () => {
     const labelErrors = !this.label.trim() ? { label: [ 'Name of the bill cannot be empty' ] } : {};
+    const sourceErrors = !this.source.trim() ? { source: [ 'Source of the bill cannot be empty' ] } : {};
     const compositionErrors = this.composition.reduce((acc, item) => {
       const billCompositionEntity = new BillCompositionEntity(item);
       const validationErrors = billCompositionEntity.validate();
       return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
     const statusErrors = ![ this.getStartState(), ...this.getOtherStates(), this.getEndState() ].includes(this.status) ? { status: [ 'Invalid status' ] } : {};
-    return { ...labelErrors, ...compositionErrors, ...statusErrors };
+    return { ...labelErrors, ...sourceErrors, ...compositionErrors, ...statusErrors };
   }
 }
