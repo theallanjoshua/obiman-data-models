@@ -5,7 +5,6 @@ export default class Bill {
   constructor(bill){
     const {
       id,
-      label,
       source,
       composition,
       customer,
@@ -22,7 +21,6 @@ export default class Bill {
       version
     } = { ...bill };
     this.id = id || '';
-    this.label = label || '';
     this.source = source || '';
     this.composition = (composition || []).map(item => new BillCompositionEntity(item).get());
     this.customer = customer || '';
@@ -51,7 +49,6 @@ export default class Bill {
     return this;
   }
   setId = id => this.set('id', id);
-  setLabel = label => this.set('label', label);
   setSource = source => this.set('source', source);
   setComposition = composition => this.set('composition', composition);
   setCustomer = customer => this.set('customer', customer);
@@ -100,7 +97,6 @@ export default class Bill {
     return this;
   }
   validate = () => {
-    const labelErrors = !this.label.trim() ? { label: [ 'Name of the bill cannot be empty' ] } : {};
     const sourceErrors = !this.source.trim() ? { source: [ 'Source of the bill cannot be empty' ] } : {};
     const compositionErrors = this.composition.reduce((acc, item) => {
       const billCompositionEntity = new BillCompositionEntity(item);
@@ -108,6 +104,6 @@ export default class Bill {
       return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
     const statusErrors = ![ this.getStartState(), ...this.getOtherStates(), this.getEndState() ].includes(this.status) ? { status: [ 'Invalid status' ] } : {};
-    return { ...labelErrors, ...sourceErrors, ...compositionErrors, ...statusErrors };
+    return { ...sourceErrors, ...compositionErrors, ...statusErrors };
   }
 }
