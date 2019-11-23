@@ -4,14 +4,15 @@ import getSymbolFromCurrency from 'currency-symbol-map';
 import Ingredient from './ingredient';
 
 const measures = ['length', 'area', 'mass', 'volume'];
+const customUnits = ['count'];
 
 export default class Utils {
-  getUnits = (from) => from ? convert().from(from).possibilities() : convert().list()
+  getUnits = (from) => from ? customUnits.includes(from) ? from : convert().from(from).possibilities() : convert().list()
     .filter(({ measure }) => measures.includes(measure))
     .map(({ abbr }) => abbr);
   getCurrencyCodes = () => Array.from(new Set(Object.keys(currencyToSymbolMap)));
   getCurrencySymbol = currencyCode => getSymbolFromCurrency(currencyCode);
-  convert = (value, from, to) => convert(value).from(from).to(to);
+  convert = (value, from, to) => customUnits.includes(from) && to === from ? value : convert(value).from(from).to(to);
   getOptimizedIngredientQuantityMap = (billComposition = [], products = []) => {
     return billComposition.reduce((acc, { id: productId, quantity: productQuantity }) => {
       const product = products.filter(({ id }) => id === productId)[0];
