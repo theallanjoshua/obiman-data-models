@@ -7,7 +7,7 @@ const measures = ['length', 'area', 'mass', 'volume'];
 const customUnits = ['count'];
 
 export default class Utils {
-  getUnits = (from) => from ? customUnits.includes(from) ? from : convert().from(from).possibilities() : [
+  getUnits = (from) => from ? customUnits.includes(from) ? [from] : convert().from(from).possibilities() : [
     ...customUnits,
     ...convert()
       .list()
