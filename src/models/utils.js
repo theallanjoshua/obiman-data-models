@@ -7,9 +7,13 @@ const measures = ['length', 'area', 'mass', 'volume'];
 const customUnits = ['count'];
 
 export default class Utils {
-  getUnits = (from) => from ? customUnits.includes(from) ? from : convert().from(from).possibilities() : convert().list()
-    .filter(({ measure }) => measures.includes(measure))
-    .map(({ abbr }) => abbr);
+  getUnits = (from) => from ? customUnits.includes(from) ? from : convert().from(from).possibilities() : [
+    ...customUnits,
+    ...convert()
+      .list()
+      .filter(({ measure }) => measures.includes(measure))
+      .map(({ abbr }) => abbr)
+  ];
   getCurrencyCodes = () => Array.from(new Set(Object.keys(currencyToSymbolMap)));
   getCurrencySymbol = currencyCode => getSymbolFromCurrency(currencyCode);
   convert = (value, from, to) => customUnits.includes(from) && to === from ? value : convert(value).from(from).to(to);
