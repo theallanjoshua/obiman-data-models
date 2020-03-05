@@ -55,5 +55,5 @@ export default class Utils {
     const subtractedIngredients = this.getInventoryModifiedIngredients(ingredientsWithReplenishedIngredients, optimizedIngredientQuantityMapToSubtract);
     return replenishedIngredients.reduce((acc, item) => !acc.filter(({ id }) => item.id === id).length ? [ ...acc, item ] : [ ...acc ], subtractedIngredients);
   }
-  getInsufficientInventoryIngredients = (ingredients = []) => ingredients.filter(({ quantity, expiryDate }) => quantity < 0 || expiryDate <= Date.now()).map(({ label }) => label);
+  getInsufficientInventoryIngredients = (ingredients = []) => ingredients.filter(({ quantity, expiryDate }) => quantity < 0 || (expiryDate && expiryDate <= Date.now())).map(({ label }) => label);
 }
