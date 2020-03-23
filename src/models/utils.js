@@ -17,26 +17,19 @@ export default class Utils {
   getCurrencyCodes = () => Array.from(new Set(Object.keys(currencyToSymbolMap)));
   getCurrencySymbol = currencyCode => getSymbolFromCurrency(currencyCode);
   convert = (value, from, to) => customUnits.includes(from) && to === from ? value : convert(value).from(from).to(to);
-  getOptimizedIngredientQuantityMap = (billComposition = [], products = []) => {
-    return billComposition.reduce((acc, { id: productId, quantity: productQuantity }) => {
-      const product = products.filter(({ id }) => id === productId)[0];
-      const { composition: productComposition } = product;
-      const ingredients = productComposition.reduce((acc, { id, quantity, unit }) => [ ...acc, { id, quantity: quantity * productQuantity, unit} ], []);
-      return ingredients.reduce((acc, { id, quantity: incomingQuantity, unit: incomingUnit }) => {
-        const { quantity: existingQuantity, unit } = acc[id] || { quantity: 0, unit: incomingUnit };
-        const normalizedQuantity = convert(incomingQuantity).from(incomingUnit).to(unit);
-        const quantity = existingQuantity + normalizedQuantity;
-        return { ...acc, [id]: { quantity, unit }};
-      }, acc);
-    }, {});
-  }
-  getInventoryModifiedIngredients = (ingredients = [], ingredientQuantityMap = {}, isReplenish = false) => {
-    return ingredients
-    .filter(({ id }) => !!ingredientQuantityMap[id])
+  getOptimizedIngredientQuantityMap = (composition = []) => composition
+    .reduce((acc, { id, quantity: incomingQuantity, unit: incomingUnit }) => {
+      const { quantity: existingQuantity, unit } = acc[id] || { quantity: 0, unit: incomingUnit };
+      const normalizedQuantity = convert(incomingQuantity).from(incomingUnit).to(unit);
+      const quantity = existingQuantity + normalizedQuantity;
+      return { ...acc, [id]: { quantity, unit }};
+    }, acc);
+  getInventoryModifiedIngredients = (ingredients = [], optimizedIngredientQuantityMap = {}, isReplenish = false) => ingredients
+    .filter(({ id }) => optimizedIngredientQuantityMap[id])
     .map(item => {
       const ingredient = new Ingredient(item);
       const { id, quantity: existingQuantity, unit, version } = ingredient.get();
-      const { quantity: incomingQuantity, unit: incomingUnit } = ingredientQuantityMap[id];
+      const { quantity: incomingQuantity, unit: incomingUnit } = optimizedIngredientQuantityMap[id];
       const normalizedQuantity = convert(incomingQuantity).from(incomingUnit).to(unit);
       const quantity = Math.round((isReplenish ? existingQuantity + normalizedQuantity : existingQuantity - normalizedQuantity) * 100) / 100;
       return ingredient
@@ -44,16 +37,6 @@ export default class Utils {
         .setVersion(version + 1)
         .get();
     });
-  }
-  getIngredientsToUpdate = (ingredients = [], products = [], incomingBillComposition = [], existingBillComposition = []) => {
-    const productsToRemove = existingBillComposition.filter(({ id, quantity }) => !incomingBillComposition.filter(entity => entity.id === id && entity.quantity === quantity).length);
-    const productsToAdd = incomingBillComposition.filter(({ id, quantity }) => !existingBillComposition.filter(entity => entity.id === id && entity.quantity === quantity).length);
-    const optimizedIngredientQuantityMapToReplenish = this.getOptimizedIngredientQuantityMap(productsToRemove, products);
-    const optimizedIngredientQuantityMapToSubtract = this.getOptimizedIngredientQuantityMap(productsToAdd, products);
-    const replenishedIngredients = this.getInventoryModifiedIngredients(ingredients, optimizedIngredientQuantityMapToReplenish, true);
-    const ingredientsWithReplenishedIngredients = ingredients.map(ingredient => replenishedIngredients.filter(({ id }) => ingredient.id === id)[0] || ingredient);
-    const subtractedIngredients = this.getInventoryModifiedIngredients(ingredientsWithReplenishedIngredients, optimizedIngredientQuantityMapToSubtract);
-    return replenishedIngredients.reduce((acc, item) => !acc.filter(({ id }) => item.id === id).length ? [ ...acc, item ] : [ ...acc ], subtractedIngredients);
-  }
+  getIngredientsToUpdate = (ingredients = [], composition = [], isReplenish = false) => this.getInventoryModifiedIngredients(ingredients, this.getOptimizedIngredientQuantityMap(composition), isReplenish);
   getInsufficientInventoryIngredients = (ingredients = []) => ingredients.filter(({ quantity, expiryDate }) => quantity < 0 || (expiryDate && expiryDate <= Date.now())).map(({ label }) => label);
 }

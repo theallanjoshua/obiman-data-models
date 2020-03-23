@@ -26,3 +26,10 @@ export const numberDropdownValidation = (numberKey, numberLabel, numberValue, dr
   }
   return { ...errors, ...numberErrors };
 }
+
+export const arrayDuplicatesValidation = (array = [], getItemToValidate = item => item) => array
+  .filter((item, index, array) => array
+    .filter(originalItem => getItemToValidate(originalItem) === getItemToValidate(item)).length > 1
+  )
+export const arrayEmptyValidation = (array = [], getItemToValidate = item => item) => array
+  .filter(item => !getItemToValidate(item).trim())

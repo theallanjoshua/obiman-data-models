@@ -4,6 +4,11 @@ import Ingredient from './ingredient';
 import Product from './product';
 import Bill from './bill';
 import Contact from './contact';
+import Table from './table';
+import {
+  arrayDuplicatesValidation,
+  arrayEmptyValidation
+} from '../utils/validation';
 
 export default class Business {
   constructor(business){
@@ -16,7 +21,11 @@ export default class Business {
       coordinates,
       currency,
       employees,
-      metadata,
+      ingredientLocations,
+      productClassifications,
+      productTaxesTypes,
+      billExternalSources,
+      tables,
       createdDate,
       updatedDate,
       createdBy,
@@ -31,7 +40,11 @@ export default class Business {
     this.coordinates = coordinates || '';
     this.currency = currency || '';
     this.employees = (employees || []).map(item => new Employee(item).get());
-    this.metadata = metadata || {};
+    this.ingredientLocations = ingredientLocations || [],
+    this.productClassifications = productClassifications || [],
+    this.productTaxesTypes = productTaxesTypes || [],
+    this.billExternalSources = billExternalSources || [],
+    this.tables = (tables || []).map(item => new Table(item).get()),
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -39,7 +52,7 @@ export default class Business {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
-  getUpdatePermissionText = () => 'edit business';
+  getUpdatePermissionText = () => 'All';
   getAllPermissions = () => {
     const ingredient = new Ingredient();
     const product = new Product();
@@ -72,7 +85,6 @@ export default class Business {
   setCoordinates = coordinates => this.set('coordinates', coordinates);
   setCurrency = currency => this.set('currency', currency);
   setEmployees = employees => this.set('employees', employees);
-  setMetadata = metadata => this.set('metadata', metadata);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
@@ -88,7 +100,7 @@ export default class Business {
         .length ? { currency: 'Please select a valid currency code' } : {};
     const updatePermissionText = this.getUpdatePermissionText();
     const sudoEmployeeError = !this.employees.filter(({ permissions }) => permissions.includes(updatePermissionText)).length ? [ `Minimum one user with permission ${updatePermissionText} must be present` ] : [];
-    const duplicateEmployeesError = this.employees.filter(({ id }, index, array) => array.filter(employee => employee.id === id).length > 1).length ? [ 'Some emails are used more than once' ]: [];
+    const duplicateEmployeesError = arrayDuplicatesValidation(this.employees, ({ id }) => id).length ? [ 'Some emails are used more than once' ]: [];
     const initEmployeeErrors = sudoEmployeeError.length || duplicateEmployeesError.length ? { employees: [ ...sudoEmployeeError, ...duplicateEmployeesError ] } : {};
     const employeesErrors = this.employees.reduce((acc, item) => {
       const employee = new Employee(item);
@@ -103,13 +115,34 @@ export default class Business {
       const validationErrors = contact.validate();
       return Object.keys(validationErrors).length ? { ...acc, contacts: [ 'Contacts have errors' ] } : { ...acc };
     }, {});
-    const metadataErrors = Object.keys(this.metadata).reduce((acc, key) => {
-      const metadataItems = this.metadata[key];
-      const emptyMetadataItemsErrors = metadataItems.filter(item => !item).length ? [ 'Cannot have empty values' ] : [];
-      const duplicateMetadataItemsErrors = metadataItems.filter((metadataItem, index, array) => array.filter(item => item === metadataItem).length > 1).length ? [ 'Some values are used more than once' ]: [];
-      const errors = [ ...emptyMetadataItemsErrors, ...duplicateMetadataItemsErrors ];
-      return errors.length ? { ...acc, [key]: errors } : { ...acc };
+    const metadataErrors = [{
+      key: 'ingredientLocations',
+      array: this.ingredientLocations,
+      label: 'Ingredient locations'
+    }, {
+      key: 'productClassifications',
+      array: this.productClassifications,
+      label: 'Product classifications'
+    }, {
+      key: 'productTaxesTypes',
+      array: this.productTaxesTypes,
+      label: 'Product tax types'
+    }, {
+      key: 'billExternalSources',
+      array: this.billExternalSources,
+      label: 'Bill external sources'
+    }].reduce((acc, { key = '', array = [], label = '' }) => {
+      const emptyErrors = arrayEmptyValidation(array).length ? [ `${label} cannot have empty values` ] : [];
+      const duplicateErrors = arrayDuplicatesValidation(array).length ? [ `Some ${label.toLowerCase()} are used more than once` ]: [];
+      const errors = emptyErrors.length || duplicateErrors.length ? { [key]: [ ...emptyErrors, ...duplicateErrors ] } : {};
+      return { ...acc, ...errors };
     }, {});
-    return { ...labelErrors, ...currencyErrors, ...employeesErrors, ...contactErrors, ...(Object.keys(metadataErrors).length ? { metadata: { ...metadataErrors } } : {}) };
+    return {
+      ...labelErrors,
+      ...currencyErrors,
+      ...employeesErrors,
+      ...contactErrors,
+      ...metadataErrors
+    };
   }
 }

@@ -13,8 +13,9 @@ export default class Product {
       recipe,
       price,
       tax,
-      profit,
       classification,
+      isAvailable = true,
+      nextAvailable,
       createdDate,
       updatedDate,
       createdBy,
@@ -29,8 +30,9 @@ export default class Product {
     this.recipe = recipe || '';
     this.price = price || 0;
     this.tax = (tax || []).map(item => new Tax(item).get());
-    this.profit = profit || 0;
     this.classification = classification || '';
+    this.isAvailable = isAvailable;
+    this.nextAvailable = nextAvailable || 0;
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -54,8 +56,9 @@ export default class Product {
   setRecipe = recipe => this.set('recipe', recipe);
   setPrice = price => this.set('price', price);
   setTax = tax => this.set('tax', tax);
-  setProfit = profit => this.set('profit', profit);
   setClassification = classification => this.set('classification', classification);
+  setIsAvailable = isAvailable => this.set('isAvailable', isAvailable);
+  setNextAvailable = nextAvailable => this.set('nextAvailable', nextAvailable);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
@@ -74,7 +77,6 @@ export default class Product {
       const validationErrors = tax.validate();
       return Object.keys(validationErrors).length ? { ...acc, tax: [ 'Tax has errors' ] } : { ...acc };
     }, {});
-    const profitErrors = numberValidation('profit', 'Profit', this.profit, true);
-    return { ...labelErrors, ...compositionErrors, ...priceErrors, ...taxErrors, ...profitErrors };
+    return { ...labelErrors, ...compositionErrors, ...priceErrors, ...taxErrors };
   }
 }
