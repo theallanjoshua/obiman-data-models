@@ -85,6 +85,11 @@ export default class Business {
   setCoordinates = coordinates => this.set('coordinates', coordinates);
   setCurrency = currency => this.set('currency', currency);
   setEmployees = employees => this.set('employees', employees);
+  setIngredientLocations = ingredientLocations => this.set('ingredientLocations', ingredientLocations);
+  setProductClassifications = productClassifications => this.set('productClassifications', productClassifications);
+  setProductTaxTypes = productTaxesTypes => this.set('productTaxesTypes', productTaxesTypes);
+  setBillExternalSources = billExternalSources => this.set('billExternalSources', billExternalSources);
+  setTables = tables => this.set('tables', tables);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);

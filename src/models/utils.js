@@ -22,8 +22,8 @@ export default class Utils {
       const { quantity: existingQuantity, unit } = acc[id] || { quantity: 0, unit: incomingUnit };
       const normalizedQuantity = convert(incomingQuantity).from(incomingUnit).to(unit);
       const quantity = existingQuantity + normalizedQuantity;
-      return { ...acc, [id]: { quantity, unit }};
-    }, acc);
+      return { ...acc, [id]: { quantity, unit } };
+    }, {});
   getInventoryModifiedIngredients = (ingredients = [], optimizedIngredientQuantityMap = {}, isReplenish = false) => ingredients
     .filter(({ id }) => optimizedIngredientQuantityMap[id])
     .map(item => {
