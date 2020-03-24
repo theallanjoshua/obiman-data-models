@@ -30,6 +30,6 @@ export default class BillCompositionEntity {
   setProfit = profit => this.set('profit', profit);
   validate = () => {
     const productErrors = !this.id ? { id: ['Name of the product cannot be empty' ] } : {};
-    return { ...productErrors, ...quantityErrors };
+    return { ...productErrors };
   }
 }
