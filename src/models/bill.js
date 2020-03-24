@@ -1,5 +1,6 @@
 import BillCompositionEntity from './bill-composition-entity';
 import Product from './product';
+import Order from './order';
 
 export default class Bill {
   constructor(bill){
@@ -9,6 +10,7 @@ export default class Bill {
       composition,
       customer,
       status,
+      cancelReason,
       taxlessTotal,
       tax,
       taxAmount,
@@ -25,6 +27,7 @@ export default class Bill {
     this.composition = (composition || []).map(item => new BillCompositionEntity(item).get());
     this.customer = customer || '';
     this.status = status || '';
+    this.cancelReason = cancelReason || '';
     this.taxlessTotal = taxlessTotal || 0;
     this.tax = tax || {};
     this.taxAmount = taxAmount || 0;
@@ -42,8 +45,9 @@ export default class Bill {
   getUpdatePermissionText = () => 'edit bills';
   getDeletePermissionText = () => 'delete bills';
   getStartState = () => 'Open';
-  getOtherStates = () => [];
-  getEndState = () => 'Closed';
+  getPositiveEndState = () => 'Paid';
+  getNegativeEndState = () => 'Cancelled'
+  getStates = () => [ this.getStartState(), this.getPositiveEndState(), this.getNegativeEndState() ];
   set = (key, value) => {
     this[key] = value;
     return this;
@@ -53,45 +57,55 @@ export default class Bill {
   setComposition = composition => this.set('composition', composition);
   setCustomer = customer => this.set('customer', customer);
   setStatus = status => this.set('status', status);
+  setCancelReason = cancelReason => this.set('cancelReason', cancelReason);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
   setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
-  enrich = products => {
+  enrich = (products, orders) => {
     const product = new Product().get();
     // Enrich composition
     this.composition = this.composition.map(item => {
       const billCompositionEntity = new BillCompositionEntity(item);
       const billCompositionEntityData = billCompositionEntity.get();
-      const { id } = billCompositionEntityData;
+      const { id, orderId } = billCompositionEntityData;
       const { label, price, tax, profit } = products.filter(({ id: productId }) => id === productId)[0] || product;
+      const { status } = orders.filter(({ id }) => id === orderId)[0] || new Order().get();
       return billCompositionEntity
         .setLabel(label)
         .setPrice(price)
         .setTax(tax)
         .setProfit(profit)
+        .setStatus(status)
         .get();
     });
+    // Enrich total (before taxes)
+    this.taxlessTotal = this.composition
+      .filter(({ status }) => status !== new Order().getNegativeEndState())
+      .reduce((acc, { id }) => {
+        const { price } = products.filter(({ id: productId }) => id === productId)[0] || product;
+        return acc + price;
+      }, 0);
     // Enrich tax metadata
-    this.tax = this.composition.reduce((acc, { id }) => {
-      const { price, tax } = products.filter(({ id: productId }) => id === productId)[0] || product;
-      return tax.reduce((accumulator, { type, percentage }) => {
-        const amount = price * (percentage / 100);
-        const existingAmount = accumulator[type] || 0;
-        return { ...accumulator, [type]: existingAmount + amount };
-      }, acc);
-    }, {});
+    this.tax = this.composition
+      .filter(({ status }) => status !== new Order().getNegativeEndState())
+      .reduce((acc, { id }) => {
+        const { price, tax } = products.filter(({ id: productId }) => id === productId)[0] || product;
+        return tax.reduce((accumulator, { type, percentage }) => {
+          const amount = price * (percentage / 100);
+          const existingAmount = accumulator[type] || 0;
+          return { ...accumulator, [type]: existingAmount + amount };
+        }, acc);
+      }, {});
     // Enrich tax amount
     this.taxAmount = Object.values(this.tax).reduce((acc, item) => acc + item, 0);
-    this.taxlessTotal = this.composition.reduce((acc, { id }) => {
-      const { price } = products.filter(({ id: productId }) => id === productId)[0] || product;
-      return acc + price;
-    }, 0);
-    // Enrich total bill amount
+    // Enrich total (after taxes)
     this.total = this.taxlessTotal + this.taxAmount;
     // Enrich profit
-    this.profit = this.composition.reduce((acc, { profit }) => acc + profit, 0);
+    this.profit = this.composition
+      .filter(({ status }) => status !== new Order().getNegativeEndState())
+      .reduce((acc, { profit }) => acc + profit, 0);
     return this;
   }
   validate = () => {
@@ -101,7 +115,7 @@ export default class Bill {
       const validationErrors = billCompositionEntity.validate();
       return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
-    const statusErrors = ![ this.getStartState(), ...this.getOtherStates(), this.getEndState() ].includes(this.status) ? { status: [ 'Invalid status' ] } : {};
+    const statusErrors = !this.getStates().includes(this.status) ? { status: [ 'Invalid status' ] } : {};
     return { ...sourceErrors, ...compositionErrors, ...statusErrors };
   }
 }

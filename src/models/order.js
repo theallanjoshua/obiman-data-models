@@ -7,6 +7,7 @@ export default class Order {
       productId,
       composition,
       status,
+      cancelReason,
       createdDate,
       updatedDate,
       createdBy,
@@ -17,6 +18,7 @@ export default class Order {
     this.productId = productId || '';
     this.composition = (composition || []).map(item => new ProductCompositionEntity(item).get());
     this.status = status || '';
+    this.cancelReason = cancelReason || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -24,6 +26,10 @@ export default class Order {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
+  getStartState = () => 'Placed';
+  getPositiveEndState = () => 'Served';
+  getNegativeEndState = () => 'Cancelled'
+  getStates = () => [ this.getStartState(), this.getPositiveEndState(), this.getNegativeEndState() ];
   set = (key, value) => {
     this[key] = value;
     return this;
@@ -32,6 +38,7 @@ export default class Order {
   setProductId = productId => this.set('productId', productId);
   setComposition = composition => this.set('composition', composition);
   setStatus = status => this.set('status', status);
+  setCancelReason = cancelReason => this.set('cancelReason', cancelReason);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
