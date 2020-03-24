@@ -74,21 +74,19 @@ export default class Bill {
         .get();
     });
     // Enrich tax metadata
-    this.tax = this.composition.reduce((acc, { id, quantity }) => {
+    this.tax = this.composition.reduce((acc, { id }) => {
       const { price, tax } = products.filter(({ id: productId }) => id === productId)[0] || product;
-      const calculatedPrice = price * quantity;
       return tax.reduce((accumulator, { type, percentage }) => {
-        const amount = calculatedPrice * (percentage / 100);
+        const amount = price * (percentage / 100);
         const existingAmount = accumulator[type] || 0;
         return { ...accumulator, [type]: existingAmount + amount };
       }, acc);
     }, {});
     // Enrich tax amount
     this.taxAmount = Object.values(this.tax).reduce((acc, item) => acc + item, 0);
-    this.taxlessTotal = this.composition.reduce((acc, { id, quantity }) => {
+    this.taxlessTotal = this.composition.reduce((acc, { id }) => {
       const { price } = products.filter(({ id: productId }) => id === productId)[0] || product;
-      const calculatedPrice = price * quantity;
-      return acc + calculatedPrice;
+      return acc + price;
     }, 0);
     // Enrich total bill amount
     this.total = this.taxlessTotal + this.taxAmount;

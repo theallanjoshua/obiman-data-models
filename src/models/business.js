@@ -2,7 +2,6 @@ import Utils from './utils';
 import Employee from './employee';
 import Ingredient from './ingredient';
 import Product from './product';
-import Bill from './bill';
 import Contact from './contact';
 import Table from './table';
 import {
@@ -56,7 +55,6 @@ export default class Business {
   getAllPermissions = () => {
     const ingredient = new Ingredient();
     const product = new Product();
-    const bill = new Bill();
     return [
       this.getUpdatePermissionText(),
       ingredient.getCreatePermissionText(),
@@ -66,11 +64,7 @@ export default class Business {
       product.getCreatePermissionText(),
       product.getReadPermissionText(),
       product.getUpdatePermissionText(),
-      product.getDeletePermissionText(),
-      bill.getCreatePermissionText(),
-      bill.getReadPermissionText(),
-      bill.getUpdatePermissionText(),
-      bill.getDeletePermissionText(),
+      product.getDeletePermissionText()
     ];
   };
   set = (key, value) => {
