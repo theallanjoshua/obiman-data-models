@@ -5,6 +5,7 @@ export default class Order {
     const {
       id,
       productId,
+      productLabel,
       composition,
       status,
       cancelReason,
@@ -16,6 +17,7 @@ export default class Order {
     } = { ...bill };
     this.id = id || '';
     this.productId = productId || '';
+    this.productLabel = productLabel || '';
     this.composition = (composition || []).map(item => new ProductCompositionEntity(item).get());
     this.status = status || '';
     this.cancelReason = cancelReason || '';
@@ -36,6 +38,7 @@ export default class Order {
   }
   setId = id => this.set('id', id);
   setProductId = productId => this.set('productId', productId);
+  setProductLabel = productLabel => this.set('productLabel', productLabel);
   setComposition = composition => this.set('composition', composition);
   setStatus = status => this.set('status', status);
   setCancelReason = cancelReason => this.set('cancelReason', cancelReason);
