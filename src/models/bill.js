@@ -80,9 +80,9 @@ export default class Bill {
     this.composition = this.composition.map(item => {
       const billCompositionEntity = new BillCompositionEntity(item);
       const billCompositionEntityData = billCompositionEntity.get();
-      const { id, orderId } = billCompositionEntityData;
+      const { id, orderId, status: existingStatus } = billCompositionEntityData;
       const { label, price, tax, profit = 0 } = products.filter(({ id: productId }) => id === productId)[0] || billCompositionEntityData;
-      const { status } = orders.filter(({ id }) => id === orderId)[0] || new Order().get();
+      const { status } = orders.filter(({ id }) => id === orderId)[0] || { status: existingStatus };
       return billCompositionEntity
         .setLabel(label)
         .setPrice(price)
@@ -97,7 +97,7 @@ export default class Bill {
       .reduce((acc, item) => {
         const { price } = products.filter(({ id: productId }) => item.id === productId)[0] || item;
         return acc + price;
-      }, 0);
+      }, 0).toFixed(2);
     // Enrich tax metadata
     this.tax = compositionWithoutCancelledOrders
       .reduce((acc, item) => {
@@ -109,11 +109,11 @@ export default class Bill {
         }, acc);
       }, {});
     // Enrich tax amount
-    this.taxAmount = Object.values(this.tax).reduce((acc, item) => acc + item, 0);
+    this.taxAmount = Object.values(this.tax).reduce((acc, item) => acc + item, 0).toFixed(2);
     // Enrich total (after taxes)
     this.total = this.taxlessTotal + this.taxAmount;
     // Enrich profit
-    this.profit = compositionWithoutCancelledOrders.reduce((acc, { profit }) => acc + profit, 0);
+    this.profit = compositionWithoutCancelledOrders.reduce((acc, { profit }) => acc + profit, 0).toFixed(2);
     return this;
   }
   validate = () => {
