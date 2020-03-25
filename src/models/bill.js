@@ -6,6 +6,7 @@ export default class Bill {
     const {
       id,
       source,
+      sourceId,
       composition,
       customer,
       status,
@@ -23,6 +24,7 @@ export default class Bill {
     } = bill;
     this.id = id || '';
     this.source = source || '';
+    this.sourceId = sourceId || '';
     this.composition = (composition || []).map(item => new BillCompositionEntity(item).get());
     this.customer = customer || '';
     this.status = status || '';
@@ -66,6 +68,7 @@ export default class Bill {
   }
   setId = id => this.set('id', id);
   setSource = source => this.set('source', source);
+  setSourceId = sourceId => this.set('sourceId', sourceId);
   setComposition = composition => this.set('composition', composition);
   setCustomer = customer => this.set('customer', customer);
   setStatus = status => this.set('status', status);
@@ -76,6 +79,8 @@ export default class Bill {
   setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
   enrich = (products, orders) => {
+    //Enrich status
+    this.status = this.status || this.getStartState();
     // Enrich composition
     this.composition = this.composition.map(item => {
       const billCompositionEntity = new BillCompositionEntity(item);
@@ -118,12 +123,13 @@ export default class Bill {
   }
   validate = () => {
     const sourceErrors = !this.source.trim() ? { source: [ 'Source of the bill cannot be empty' ] } : {};
+    const sourceIdErrors = !this.sourceId.trim() ? { source: [ 'Source ID of the bill cannot be empty' ] } : {};
     const compositionErrors = this.composition.reduce((acc, item) => {
       const billCompositionEntity = new BillCompositionEntity(item);
       const validationErrors = billCompositionEntity.validate();
       return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
     const statusErrors = !this.getStates().includes(this.status) ? { status: [ 'Invalid status' ] } : {};
-    return { ...sourceErrors, ...compositionErrors, ...statusErrors };
+    return { ...sourceErrors, ...sourceIdErrors, ...compositionErrors, ...statusErrors };
   }
 }

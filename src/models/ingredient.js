@@ -41,7 +41,6 @@ export default class Ingredient {
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getCreatePermissionText = () => 'add ingredients';
-  getReadPermissionText = () => 'view ingredients';
   getUpdatePermissionText = () => 'edit ingredients';
   getDeletePermissionText = () => 'delete ingredients';
   set = (key, value) => {

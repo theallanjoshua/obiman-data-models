@@ -23,7 +23,7 @@ export default class Business {
       ingredientLocations,
       productClassifications,
       productTaxesTypes,
-      billExternalSources,
+      billSources,
       tables,
       createdDate,
       updatedDate,
@@ -42,7 +42,7 @@ export default class Business {
     this.ingredientLocations = ingredientLocations || [],
     this.productClassifications = productClassifications || [],
     this.productTaxesTypes = productTaxesTypes || [],
-    this.billExternalSources = billExternalSources || [],
+    this.billSources = billSources || [],
     this.tables = (tables || []).map(item => new Table(item).get()),
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
@@ -58,11 +58,9 @@ export default class Business {
     return [
       this.getUpdatePermissionText(),
       ingredient.getCreatePermissionText(),
-      ingredient.getReadPermissionText(),
       ingredient.getUpdatePermissionText(),
       ingredient.getDeletePermissionText(),
       product.getCreatePermissionText(),
-      product.getReadPermissionText(),
       product.getUpdatePermissionText(),
       product.getDeletePermissionText()
     ];
@@ -82,7 +80,7 @@ export default class Business {
   setIngredientLocations = ingredientLocations => this.set('ingredientLocations', ingredientLocations);
   setProductClassifications = productClassifications => this.set('productClassifications', productClassifications);
   setProductTaxTypes = productTaxesTypes => this.set('productTaxesTypes', productTaxesTypes);
-  setBillExternalSources = billExternalSources => this.set('billExternalSources', billExternalSources);
+  setBillSources = billSources => this.set('billSources', billSources);
   setTables = tables => this.set('tables', tables);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
@@ -127,8 +125,8 @@ export default class Business {
       array: this.productTaxesTypes,
       label: 'Product tax types'
     }, {
-      key: 'billExternalSources',
-      array: this.billExternalSources,
+      key: 'billSources',
+      array: this.billSources,
       label: 'Bill external sources'
     }].reduce((acc, { key = '', array = [], label = '' }) => {
       const emptyErrors = arrayEmptyValidation(array).length ? [ `${label} cannot have empty values` ] : [];

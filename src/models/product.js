@@ -41,7 +41,6 @@ export default class Product {
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getCreatePermissionText = () => 'create products';
-  getReadPermissionText = () => 'view products';
   getUpdatePermissionText = () => 'edit products';
   getDeletePermissionText = () => 'delete products';
   set = (key, value) => {

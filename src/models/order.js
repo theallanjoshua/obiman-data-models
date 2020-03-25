@@ -1,4 +1,95 @@
-import ProductCompositionEntity from './product-composition-entity';
+const STATES = [
+  {
+    id: 'Placed',
+    needsAuthorization: false,
+    isNegative: false,
+    business: {
+      shortLabel: 'New',
+      label: '',
+      nextStates: ['Confirm', 'Cancel']
+    },
+    customer: {
+      shortLabel: 'Placed',
+      label: 'Awaiting confirmation',
+      nextStates: []
+    }
+  },
+  {
+    id: 'Cancel',
+    needsAuthorization: true,
+    isNegative: true,
+    business: {
+      shortLabel: 'Cancelled',
+      label: '',
+      nextStates: ['Confirmed', 'Cancel']
+    },
+    customer: {
+      shortLabel: 'Cancelled',
+      label: 'Awaiting confirmation',
+      nextStates: ['Cancel']
+    }
+  },
+  {
+    id: 'Confirm',
+    needsAuthorization: true,
+    isNegative: false,
+    business: {
+      shortLabel: 'Pending',
+      label: '',
+      nextStates: ['Preparing', 'Cancel']
+    },
+    customer: {
+      shortLabel: 'Confirmed',
+      label: 'Pending preparation',
+      nextStates: []
+    }
+  },
+  {
+    id: 'Preparing',
+    needsAuthorization: true,
+    isNegative: false,
+    business: {
+      shortLabel: 'Preparing',
+      label: '',
+      nextStates: ['Prepared', 'Cancel']
+    },
+    customer: {
+      shortLabel: 'Preparing',
+      label: '',
+      nextStates: ['Cancel']
+    }
+  },
+  {
+    id: 'Prepared',
+    needsAuthorization: true,
+    isNegative: false,
+    business: {
+      shortLabel: 'Prepared',
+      label: '',
+      nextStates: ['Served', 'Cancel']
+    },
+    customer: {
+      shortLabel: 'Prepared',
+      label: '',
+      nextStates: ['Cancel']
+    }
+  },
+  {
+    id: 'Served',
+    needsAuthorization: true,
+    isNegative: false,
+    business: {
+      shortLabel: 'Served',
+      label: '',
+      nextStates: ['Cancel']
+    },
+    customer: {
+      shortLabel: 'Served',
+      label: '',
+      nextStates: []
+    }
+  }
+];
 
 export default class Order {
   constructor(bill = {}){
@@ -6,7 +97,7 @@ export default class Order {
       id,
       productId,
       productLabel,
-      composition,
+      billId,
       status,
       cancelReason,
       createdDate,
@@ -18,7 +109,7 @@ export default class Order {
     this.id = id || '';
     this.productId = productId || '';
     this.productLabel = productLabel || '';
-    this.composition = (composition || []).map(item => new ProductCompositionEntity(item).get());
+    this.billId = billId || '';
     this.status = status || '';
     this.cancelReason = cancelReason || '';
     this.createdDate = createdDate || 0;
@@ -30,8 +121,8 @@ export default class Order {
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getStartState = () => 'Placed';
   getPositiveEndState = () => 'Served';
-  getNegativeEndState = () => 'Cancelled'
-  getStates = () => [ this.getStartState(), this.getPositiveEndState(), this.getNegativeEndState() ];
+  getNegativeEndState = () => 'Cancel';
+  getStates = () => STATES;
   set = (key, value) => {
     this[key] = value;
     return this;
@@ -39,7 +130,7 @@ export default class Order {
   setId = id => this.set('id', id);
   setProductId = productId => this.set('productId', productId);
   setProductLabel = productLabel => this.set('productLabel', productLabel);
-  setComposition = composition => this.set('composition', composition);
+  setBillId = billId => this.set('billId', billId);
   setStatus = status => this.set('status', status);
   setCancelReason = cancelReason => this.set('cancelReason', cancelReason);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
