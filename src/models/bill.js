@@ -1,5 +1,4 @@
 import BillCompositionEntity from './bill-composition-entity';
-import Product from './product';
 import Order from './order';
 
 export default class Bill {
@@ -56,8 +55,8 @@ export default class Bill {
       return [ ...acc.filter(({ id }) => id !== item.id), {
         id,
         label,
+        price,
         quantity: item.status !== new Order().getNegativeEndState() ? quantity + 1 : quantity,
-        price: item.status !== new Order().getNegativeEndState() ? price + item.price : price,
         children: [ ...children, item ]
       }]
     }, []);
@@ -77,13 +76,12 @@ export default class Bill {
   setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
   enrich = (products, orders) => {
-    const product = new Product().get();
     // Enrich composition
     this.composition = this.composition.map(item => {
       const billCompositionEntity = new BillCompositionEntity(item);
       const billCompositionEntityData = billCompositionEntity.get();
       const { id, orderId } = billCompositionEntityData;
-      const { label, price, tax, profit = 0 } = products.filter(({ id: productId }) => id === productId)[0] || product;
+      const { label, price, tax, profit = 0 } = products.filter(({ id: productId }) => id === productId)[0] || billCompositionEntityData;
       const { status } = orders.filter(({ id }) => id === orderId)[0] || new Order().get();
       return billCompositionEntity
         .setLabel(label)
@@ -96,14 +94,14 @@ export default class Bill {
     const compositionWithoutCancelledOrders = this.composition.filter(({ status }) => status !== new Order().getNegativeEndState());
     // Enrich total (before taxes)
     this.taxlessTotal = compositionWithoutCancelledOrders
-      .reduce((acc, { id }) => {
-        const { price } = products.filter(({ id: productId }) => id === productId)[0] || product;
+      .reduce((acc, item) => {
+        const { price } = products.filter(({ id: productId }) => item.id === productId)[0] || item;
         return acc + price;
       }, 0);
     // Enrich tax metadata
     this.tax = compositionWithoutCancelledOrders
-      .reduce((acc, { id }) => {
-        const { price, tax } = products.filter(({ id: productId }) => id === productId)[0] || product;
+      .reduce((acc, item) => {
+        const { price, tax } = products.filter(({ id: productId }) => item.id === productId)[0] || item;
         return tax.reduce((accumulator, { type, percentage }) => {
           const amount = price * (percentage / 100);
           const existingAmount = accumulator[type] || 0;
