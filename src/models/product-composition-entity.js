@@ -8,7 +8,7 @@ export default class ProductCompositionEntity {
       label,
       quantity,
       unit
-    } = { ...productCompositionEntity };
+    } = productCompositionEntity;
     this.id = id || '';
     this.label = label || '';
     this.quantity = quantity || 0;

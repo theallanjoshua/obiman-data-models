@@ -4,7 +4,7 @@ export default class User {
       id,
       businesses,
       version
-    } = { ...user };
+    } = user;
     this.id = id || '';
     this.businesses = businesses || [];
     this.version = version || 0;

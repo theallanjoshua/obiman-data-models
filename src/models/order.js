@@ -14,7 +14,7 @@ export default class Order {
       createdBy,
       updatedBy,
       version
-    } = { ...bill };
+    } = bill;
     this.id = id || '';
     this.productId = productId || '';
     this.productLabel = productLabel || '';

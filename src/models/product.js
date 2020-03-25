@@ -21,7 +21,7 @@ export default class Product {
       createdBy,
       updatedBy,
       version
-    } = { ...product };
+    } = product;
     this.id = id || '';
     this.label = label || '';
     this.description = description || '';

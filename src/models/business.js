@@ -30,7 +30,7 @@ export default class Business {
       createdBy,
       updatedBy,
       version
-    } = { ...business };
+    } = business;
     this.id = id || '';
     this.label = label || '';
     this.logo = logo || '';

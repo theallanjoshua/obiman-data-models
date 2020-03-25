@@ -3,7 +3,7 @@ export default class Employee {
     const {
       id,
       permissions
-    } = { ...employee };
+    } = employee;
     this.id = id || '';
     this.permissions = permissions || [];
   }

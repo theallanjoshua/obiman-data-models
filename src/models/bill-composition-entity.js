@@ -10,7 +10,7 @@ export default class BillCompositionEntity {
       tax,
       profit,
       status
-    } = { ...billCompositionEntity };
+    } = billCompositionEntity;
     this.orderId = orderId || '';
     this.id = id || '';
     this.label = label || '';

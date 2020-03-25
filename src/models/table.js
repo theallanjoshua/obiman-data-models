@@ -4,7 +4,7 @@ export default class Table {
       id,
       label,
       location
-    } = { ...table };
+    } = table;
     this.id = id || '';
     this.label = label || '';
     this.location = location || '';

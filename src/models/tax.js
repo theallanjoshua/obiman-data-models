@@ -5,7 +5,7 @@ export default class Tax {
     const {
       type,
       percentage
-    } = { ...tax };
+    } = tax;
     this.type = type || '';
     this.percentage = percentage || 0;
   }

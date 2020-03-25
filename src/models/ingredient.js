@@ -22,7 +22,7 @@ export default class Ingredient {
       createdBy,
       updatedBy,
       version
-    } = { ...ingredient };
+    } = ingredient;
     this.id = id || '';
     this.label = label || '';
     this.image = image || '';

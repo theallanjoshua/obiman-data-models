@@ -3,7 +3,7 @@ export default class Contact {
     const {
       type,
       info
-    } = { ...contact };
+    } = contact;
     this.type = type || '';
     this.info = info || '';
   }
