@@ -5,7 +5,7 @@ import {
 } from '../utils/validation';
 
 export default class Ingredient {
-  constructor(ingredient) {
+  constructor(ingredient = {}) {
     const {
       id,
       label,

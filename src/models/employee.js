@@ -1,5 +1,5 @@
 export default class Employee {
-  constructor(employee){
+  constructor(employee = {}){
     const {
       id,
       permissions

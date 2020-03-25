@@ -1,5 +1,5 @@
 export default class User {
-  constructor(user){
+  constructor(user = {}){
     const {
       id,
       businesses,

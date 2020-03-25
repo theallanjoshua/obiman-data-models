@@ -10,7 +10,7 @@ import {
 } from '../utils/validation';
 
 export default class Business {
-  constructor(business){
+  constructor(business = {}){
     const {
       id,
       label,

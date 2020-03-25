@@ -2,7 +2,7 @@ import Utils from './utils';
 import { numberDropdownValidation } from '../utils/validation';
 
 export default class ProductCompositionEntity {
-  constructor(productCompositionEntity){
+  constructor(productCompositionEntity = {}){
     const {
       id,
       label,

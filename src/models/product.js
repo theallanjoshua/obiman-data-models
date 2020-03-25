@@ -3,7 +3,7 @@ import Tax from './tax';
 import { numberValidation } from '../utils/validation';
 
 export default class Product {
-  constructor(product){
+  constructor(product = {}){
     const {
       id,
       label,

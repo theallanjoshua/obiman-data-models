@@ -1,7 +1,7 @@
 import ProductCompositionEntity from './product-composition-entity';
 
 export default class Order {
-  constructor(bill){
+  constructor(bill = {}){
     const {
       id,
       productId,

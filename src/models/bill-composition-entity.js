@@ -1,7 +1,7 @@
 import Tax from './tax';
 
 export default class BillCompositionEntity {
-  constructor(billCompositionEntity){
+  constructor(billCompositionEntity = {}){
     const {
       orderId,
       id,

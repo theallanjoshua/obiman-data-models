@@ -1,5 +1,5 @@
 export default class Contact {
-  constructor(contact){
+  constructor(contact = {}){
     const {
       type,
       info

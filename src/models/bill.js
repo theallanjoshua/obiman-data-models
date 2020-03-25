@@ -3,7 +3,7 @@ import Product from './product';
 import Order from './order';
 
 export default class Bill {
-  constructor(bill){
+  constructor(bill  = {}){
     const {
       id,
       source,

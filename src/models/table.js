@@ -1,5 +1,5 @@
 export default class Table {
-  constructor(table){
+  constructor(table = {}){
     const {
       id,
       label,
