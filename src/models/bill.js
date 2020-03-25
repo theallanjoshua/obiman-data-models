@@ -93,11 +93,11 @@ export default class Bill {
     });
     const compositionWithoutCancelledOrders = this.composition.filter(({ status }) => status !== new Order().getNegativeEndState());
     // Enrich total (before taxes)
-    this.taxlessTotal = compositionWithoutCancelledOrders
+    this.taxlessTotal = Number(compositionWithoutCancelledOrders
       .reduce((acc, item) => {
         const { price } = products.filter(({ id: productId }) => item.id === productId)[0] || item;
         return acc + price;
-      }, 0).toFixed(2);
+      }, 0).toFixed(2));
     // Enrich tax metadata
     this.tax = compositionWithoutCancelledOrders
       .reduce((acc, item) => {
@@ -105,15 +105,15 @@ export default class Bill {
         return tax.reduce((accumulator, { type, percentage }) => {
           const amount = price * (percentage / 100);
           const existingAmount = accumulator[type] || 0;
-          return { ...accumulator, [type]: existingAmount + amount };
+          return { ...accumulator, [type]: Number((existingAmount + amount).toFixed(2)) };
         }, acc);
       }, {});
     // Enrich tax amount
-    this.taxAmount = Object.values(this.tax).reduce((acc, item) => acc + item, 0).toFixed(2);
+    this.taxAmount = Number(Object.values(this.tax).reduce((acc, item) => acc + item, 0).toFixed(2));
     // Enrich total (after taxes)
     this.total = this.taxlessTotal + this.taxAmount;
     // Enrich profit
-    this.profit = compositionWithoutCancelledOrders.reduce((acc, { profit }) => acc + profit, 0).toFixed(2);
+    this.profit = Number(compositionWithoutCancelledOrders.reduce((acc, { profit }) => acc + profit, 0).toFixed(2));
     return this;
   }
   validate = () => {
