@@ -15,21 +15,6 @@ const STATES = [
     }
   },
   {
-    id: 'Cancel',
-    needsAuthorization: true,
-    isNegative: true,
-    business: {
-      shortLabel: 'Cancelled',
-      label: '',
-      nextStates: ['Confirmed', 'Cancel']
-    },
-    customer: {
-      shortLabel: 'Cancelled',
-      label: 'Awaiting confirmation',
-      nextStates: ['Cancel']
-    }
-  },
-  {
     id: 'Confirm',
     needsAuthorization: true,
     isNegative: false,
@@ -88,7 +73,22 @@ const STATES = [
       label: '',
       nextStates: []
     }
-  }
+  },
+  {
+    id: 'Cancel',
+    needsAuthorization: true,
+    isNegative: true,
+    business: {
+      shortLabel: 'Cancelled',
+      label: '',
+      nextStates: []
+    },
+    customer: {
+      shortLabel: 'Cancelled',
+      label: '',
+      nextStates: []
+    }
+  },
 ];
 
 export default class Order {

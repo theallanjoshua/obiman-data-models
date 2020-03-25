@@ -123,7 +123,7 @@ export default class Bill {
   }
   validate = () => {
     const sourceErrors = !this.source.trim() ? { source: [ 'Source of the bill cannot be empty' ] } : {};
-    const sourceIdErrors = !this.sourceId.trim() ? { source: [ 'Source ID of the bill cannot be empty' ] } : {};
+    const sourceIdErrors = !this.sourceId.trim() ? { sourceId: [ 'Source ID of the bill cannot be empty' ] } : {};
     const compositionErrors = this.composition.reduce((acc, item) => {
       const billCompositionEntity = new BillCompositionEntity(item);
       const validationErrors = billCompositionEntity.validate();
