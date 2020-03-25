@@ -55,8 +55,8 @@ export default class Bill {
       return [ ...acc.filter(({ id }) => id !== item.id), {
         id,
         label,
-        quantity: quantity + 1,
-        price: price + item.price,
+        quantity: item.status !== new Order().getNegativeEndState() ? quantity + 1 : quantity,
+        price: item.status !== new Order().getNegativeEndState() ? price + item.price : price,
         children: [ ...children, item ]
       }]
     }, []);
