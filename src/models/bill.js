@@ -48,7 +48,8 @@ export default class Bill {
   getPositiveEndState = () => 'Paid';
   getNegativeEndState = () => 'Cancelled'
   getStates = () => [ this.getStartState(), this.getPositiveEndState(), this.getNegativeEndState() ];
-  getGroupedComposition = () => this.composition
+  getGroupedComposition = (preGroupingCondition) => this.composition
+    .filter(preGroupingCondition ? preGroupingCondition : () => true)
     .reduce((acc, item) => {
       const existingItem = acc.filter(({ id }) => id === item.id)[0] || item;
       const { id, label, quantity = 0, price = 0, children = [] } = existingItem;
