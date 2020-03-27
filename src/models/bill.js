@@ -16,6 +16,7 @@ export default class Bill {
       taxAmount,
       total,
       profit,
+      currency,
       createdDate,
       updatedDate,
       createdBy,
@@ -34,6 +35,7 @@ export default class Bill {
     this.taxAmount = taxAmount || 0;
     this.total = total || 0;
     this.profit = profit || 0;
+    this.currency = currency || '';
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -73,12 +75,13 @@ export default class Bill {
   setCustomer = customer => this.set('customer', customer);
   setStatus = status => this.set('status', status);
   setCancelReason = cancelReason => this.set('cancelReason', cancelReason);
+  setCurrency = currency => this.set('currency', currency);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
   setUpdatedBy = updatedBy => this.set('updatedBy', updatedBy);
   setVersion = version => this.set('version', version);
-  enrich = (products, orders) => {
+  enrich = (products = [], orders = []) => {
     //Enrich status
     this.status = this.status || this.getStartState();
     // Enrich composition
