@@ -3,7 +3,6 @@ import Employee from './employee';
 import Ingredient from './ingredient';
 import Product from './product';
 import Contact from './contact';
-import Table from './table';
 import {
   arrayDuplicatesValidation,
   arrayEmptyValidation
@@ -24,7 +23,6 @@ export default class Business {
       productClassifications,
       productTaxesTypes,
       billSources,
-      tables,
       createdDate,
       updatedDate,
       createdBy,
@@ -43,7 +41,6 @@ export default class Business {
     this.productClassifications = productClassifications || [],
     this.productTaxesTypes = productTaxesTypes || [],
     this.billSources = billSources || [],
-    this.tables = (tables || []).map(item => new Table(item).get()),
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -81,7 +78,6 @@ export default class Business {
   setProductClassifications = productClassifications => this.set('productClassifications', productClassifications);
   setProductTaxTypes = productTaxesTypes => this.set('productTaxesTypes', productTaxesTypes);
   setBillSources = billSources => this.set('billSources', billSources);
-  setTables = tables => this.set('tables', tables);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
