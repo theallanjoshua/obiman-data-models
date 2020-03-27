@@ -5,6 +5,8 @@ export default class Bill {
   constructor(bill  = {}){
     const {
       id,
+      businessId,
+      businessLabel,
       source,
       sourceId,
       composition,
@@ -24,6 +26,8 @@ export default class Bill {
       version
     } = bill;
     this.id = id || '';
+    this.businessId = businessId || '';
+    this.businessLabel = businessLabel || '';
     this.source = source || '';
     this.sourceId = sourceId || '';
     this.composition = (composition || []).map(item => new BillCompositionEntity(item).get());
@@ -69,6 +73,8 @@ export default class Bill {
     return this;
   }
   setId = id => this.set('id', id);
+  setBusinessId = businessId => this.set('businessId', businessId);
+  setBusinessLabel = businessLabel => this.set('businessLabel', businessLabel);
   setSource = source => this.set('source', source);
   setSourceId = sourceId => this.set('sourceId', sourceId);
   setComposition = composition => this.set('composition', composition);
