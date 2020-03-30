@@ -2,6 +2,7 @@ import Utils from './utils';
 import Employee from './employee';
 import Ingredient from './ingredient';
 import Product from './product';
+import Bill from './bill';
 import Contact from './contact';
 import {
   arrayDuplicatesValidation,
@@ -52,14 +53,16 @@ export default class Business {
   getAllPermissions = () => {
     const ingredient = new Ingredient();
     const product = new Product();
+    const bill = new Bill();
     return [
       this.getUpdatePermissionText(),
-      ingredient.getCreatePermissionText(),
-      ingredient.getUpdatePermissionText(),
-      ingredient.getDeletePermissionText(),
+      bill.getCreatePermissionText(),
       product.getCreatePermissionText(),
       product.getUpdatePermissionText(),
-      product.getDeletePermissionText()
+      product.getDeletePermissionText(),
+      ingredient.getCreatePermissionText(),
+      ingredient.getUpdatePermissionText(),
+      ingredient.getDeletePermissionText()
     ];
   };
   set = (key, value) => {

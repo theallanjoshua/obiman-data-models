@@ -1,8 +1,5 @@
 import Utils from './utils';
-import {
-  numberDropdownValidation,
-  numberValidation
-} from '../utils/validation';
+import { numberDropdownValidation } from '../utils/validation';
 
 export default class Ingredient {
   constructor(ingredient = {}) {
@@ -16,7 +13,6 @@ export default class Ingredient {
       location,
       thresholdQuantity,
       thresholdUnit,
-      cost,
       createdDate,
       updatedDate,
       createdBy,
@@ -32,7 +28,6 @@ export default class Ingredient {
     this.location = location || '';
     this.thresholdQuantity = thresholdQuantity || 0;
     this.thresholdUnit = thresholdUnit || '';
-    this.cost = cost || 0;
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -56,7 +51,6 @@ export default class Ingredient {
   setLocation = location => this.set('location', location);
   setThresholdQuantity = thresholdQuantity => this.set('thresholdQuantity', thresholdQuantity);
   setThresholdUnit = thresholdUnit => this.set('thresholdUnit', thresholdUnit);
-  setCost = cost => this.set('cost', cost);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);
@@ -67,7 +61,6 @@ export default class Ingredient {
     const labelErrors = !this.label.trim() ? { label: [ 'Name of the ingredient cannot be empty' ] } : {};
     const quantityUnitErrors = numberDropdownValidation('quantity', 'Quantity', this.quantity, 'unit', 'Unit', this.unit, utils.getUnits());
     const thresholdQuantityUnitErrors = numberDropdownValidation('thresholdQuantity', 'Threshold Quantity', this.thresholdQuantity, 'thresholdUnit', 'Threshold unit', this.thresholdUnit, utils.getUnits(this.unit), false);
-    const costErrors = numberValidation('cost', 'cost', this.cost, true);
-    return { ...labelErrors, ...quantityUnitErrors, ...thresholdQuantityUnitErrors, ...costErrors };
+    return { ...labelErrors, ...quantityUnitErrors, ...thresholdQuantityUnitErrors };
   }
 }

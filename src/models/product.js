@@ -15,7 +15,7 @@ export default class Product {
       tax,
       classification,
       isAvailable = true,
-      nextAvailable,
+      nextAvailableOn,
       createdDate,
       updatedDate,
       createdBy,
@@ -32,7 +32,7 @@ export default class Product {
     this.tax = (tax || []).map(item => new Tax(item).get());
     this.classification = classification || '';
     this.isAvailable = isAvailable;
-    this.nextAvailable = nextAvailable || 0;
+    this.nextAvailableOn = nextAvailableOn || 0;
     this.createdDate = createdDate || 0;
     this.updatedDate = updatedDate || 0;
     this.createdBy = createdBy || '';
@@ -57,7 +57,7 @@ export default class Product {
   setTax = tax => this.set('tax', tax);
   setClassification = classification => this.set('classification', classification);
   setIsAvailable = isAvailable => this.set('isAvailable', isAvailable);
-  setNextAvailable = nextAvailable => this.set('nextAvailable', nextAvailable);
+  setNextAvailableOn = nextAvailableOn => this.set('nextAvailableOn', nextAvailableOn);
   setCreatedDate = createdDate => this.set('createdDate', createdDate);
   setUpdatedDate = updatedDate => this.set('updatedDate', updatedDate);
   setCreatedBy = createdBy => this.set('createdBy', createdBy);

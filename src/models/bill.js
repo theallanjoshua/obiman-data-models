@@ -48,9 +48,6 @@ export default class Bill {
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getCreatePermissionText = () => 'create bills';
-  getReadPermissionText = () => 'view bills';
-  getUpdatePermissionText = () => 'edit bills';
-  getDeletePermissionText = () => 'delete bills';
   getStartState = () => 'Open';
   getPositiveEndState = () => 'Paid';
   getNegativeEndState = () => 'Cancelled'
