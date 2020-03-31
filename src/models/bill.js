@@ -24,9 +24,6 @@ const STATES = [
       nextStates: [{
         id: 'Pay',
         label: 'Pay'
-      }, {
-        id: 'Cancel',
-        label: 'Cancel'
       }]
     }
   },
