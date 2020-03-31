@@ -1,6 +1,114 @@
 import BillCompositionEntity from './bill-composition-entity';
 import Order from './order';
 
+const STATES = [
+  {
+    id: 'Open',
+    isStartState: true,
+    needsAuthorization: false,
+    isNegative: false,
+    business: {
+      label: 'Open',
+      description: '',
+      nextStates: [{
+        id: 'Paid',
+        label: 'Paid'
+      }, {
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
+    },
+    customer: {
+      label: 'Open',
+      description: '',
+      nextStates: [{
+        id: 'Pay',
+        label: 'Pay'
+      }, {
+        id: 'Cancel',
+        label: 'Cancel'
+      }]
+    }
+  },
+  {
+    id: 'Pay',
+    needsAuthorization: false,
+    isNegative: false,
+    business: {
+      label: 'Payment pending',
+      description: '',
+      nextStates: [{
+        id: 'Paid',
+        label: 'Paid'
+      }, {
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
+    },
+    customer: {
+      label: 'Payment pending',
+      description: '',
+      nextStates: [{
+        id: 'Cancel',
+        label: 'Cancel'
+      }]
+    }
+  },
+  {
+    id: 'Paid',
+    isEndState: true,
+    needsAuthorization: true,
+    isNegative: false,
+    business: {
+      label: 'Paid',
+      description: '',
+      nextStates: [{
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
+    },
+    customer: {
+      label: 'Paid',
+      description: '',
+      nextStates: []
+    }
+  },
+  {
+    id: 'Cancel',
+    needsAuthorization: false,
+    isNegative: true,
+    business: {
+      label: 'Cancellation request',
+      description: '',
+      nextStates: [{
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
+    },
+    customer: {
+      label: 'Pending cancellation',
+      description: '',
+      nextStates: []
+    }
+  },
+  {
+    id: 'Cancelled',
+    isEndState: true,
+    needsAuthorization: true,
+    isNegative: true,
+    business: {
+      label: 'Cancelled',
+      description: '',
+      nextStates: []
+    },
+    customer: {
+      label: 'Cancelled',
+      description: '',
+      nextStates: []
+    }
+  },
+];
+
 export default class Bill {
   constructor(bill  = {}){
     const {
@@ -48,10 +156,11 @@ export default class Bill {
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
   getCreatePermissionText = () => 'create bills';
-  getStartState = () => 'Open';
-  getPositiveEndState = () => 'Paid';
-  getNegativeEndState = () => 'Cancelled'
-  getStates = () => [ this.getStartState(), this.getPositiveEndState(), this.getNegativeEndState() ];
+  getStartState = () => STATES.filter(({ isStartState }) => isStartState)[0].id;
+  getEndStates = () => STATES.filter(({ isEndState }) => isEndState).map(({ id }) => id);
+  getPositiveEndState = () => STATES.filter(({ isEndState, isNegative }) => isEndState && !isNegative)[0].id;
+  getNegativeEndState = () => STATES.filter(({ isEndState, isNegative }) => isEndState && isNegative)[0].id;
+  getStates = () => STATES;
   getGroupedComposition = (preGroupingCondition) => this.composition
     .filter(preGroupingCondition ? preGroupingCondition : () => true)
     .reduce((acc, item) => {

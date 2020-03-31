@@ -1,32 +1,48 @@
 const STATES = [
   {
     id: 'Placed',
+    isStartState: true,
     needsAuthorization: false,
     isNegative: false,
     business: {
-      shortLabel: 'New',
-      label: '',
-      nextStates: ['Confirm', 'Cancel']
+      label: 'New',
+      description: '',
+      nextStates: [{
+        id: 'Confirmed',
+        label: 'Confirm'
+      }, {
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
     },
     customer: {
-      shortLabel: 'Placed',
-      label: 'Awaiting confirmation',
+      label: 'Placed',
+      description: 'Awaiting confirmation',
       nextStates: []
     }
   },
   {
-    id: 'Confirm',
+    id: 'Confirmed',
     needsAuthorization: true,
     isNegative: false,
     business: {
-      shortLabel: 'Pending',
-      label: '',
-      nextStates: ['Preparing', 'Cancel']
+      label: 'Pending',
+      description: '',
+      nextStates: [{
+        id: 'Preparing',
+        label: 'Start preparing'
+      }, {
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
     },
     customer: {
-      shortLabel: 'Confirmed',
-      label: 'Pending preparation',
-      nextStates: []
+      label: 'Confirmed',
+      description: 'Pending preparation',
+      nextStates: [{
+        id: 'Cancel',
+        label: 'Cancel'
+      }]
     }
   },
   {
@@ -34,14 +50,23 @@ const STATES = [
     needsAuthorization: true,
     isNegative: false,
     business: {
-      shortLabel: 'Preparing',
-      label: '',
-      nextStates: ['Prepared', 'Cancel']
+      label: 'Preparing',
+      description: '',
+      nextStates: [{
+        id: 'Prepared',
+        label: 'Prepared'
+      }, {
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
     },
     customer: {
-      shortLabel: 'Preparing',
-      label: '',
-      nextStates: ['Cancel']
+      label: 'Preparing',
+      description: '',
+      nextStates: [{
+        id: 'Cancel',
+        label: 'Cancel'
+      }]
     }
   },
   {
@@ -49,46 +74,81 @@ const STATES = [
     needsAuthorization: true,
     isNegative: false,
     business: {
-      shortLabel: 'Prepared',
-      label: '',
-      nextStates: ['Served', 'Cancel']
+      label: 'Prepared',
+      description: '',
+      nextStates: [{
+        id: 'Served',
+        label: 'Served'
+      }, {
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
     },
     customer: {
-      shortLabel: 'Prepared',
-      label: '',
-      nextStates: ['Cancel']
+      label: 'Prepared',
+      description: '',
+      nextStates: [{
+        id: 'Cancel',
+        label: 'Cancel'
+      }]
     }
   },
   {
     id: 'Served',
+    isEndState: true,
     needsAuthorization: true,
     isNegative: false,
     business: {
-      shortLabel: 'Served',
-      label: '',
-      nextStates: ['Cancel']
+      label: 'Served',
+      description: '',
+      nextStates: [{
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
     },
     customer: {
-      shortLabel: 'Served',
-      label: '',
-      nextStates: []
+      label: 'Served',
+      description: '',
+      nextStates: [{
+        id: 'Cancel',
+        label: 'Cancel'
+      }]
     }
   },
   {
     id: 'Cancel',
-    needsAuthorization: true,
+    needsAuthorization: false,
     isNegative: true,
     business: {
-      shortLabel: 'Cancelled',
-      label: '',
-      nextStates: []
+      label: 'Cancellation request',
+      description: '',
+      nextStates: [{
+        id: 'Cancelled',
+        label: 'Cancel'
+      }]
     },
     customer: {
-      shortLabel: 'Cancelled',
-      label: '',
+      label: 'Pending cancellation',
+      description: '',
       nextStates: []
     }
   },
+  {
+    id: 'Cancelled',
+    isEndState: true,
+    needsAuthorization: true,
+    isNegative: true,
+    business: {
+      label: 'Cancelled',
+      description: '',
+      nextStates: []
+    },
+    customer: {
+      label: 'Cancelled',
+      description: '',
+      nextStates: []
+    }
+  }
 ];
 
 export default class Order {
@@ -119,9 +179,10 @@ export default class Order {
     this.version = version || 0;
   }
   get = () => Object.keys(this).reduce((acc, key) => typeof this[key] === 'function' ? { ...acc } : { ...acc, [key]: this[key] }, {});
-  getStartState = () => 'Placed';
-  getPositiveEndState = () => 'Served';
-  getNegativeEndState = () => 'Cancel';
+  getStartState = () => STATES.filter(({ isStartState }) => isStartState)[0].id;
+  getEndStates = () => STATES.filter(({ isEndState }) => isEndState).map(({ id }) => id);
+  getPositiveEndState = () => STATES.filter(({ isEndState, isNegative }) => isEndState && !isNegative)[0].id;
+  getNegativeEndState = () => STATES.filter(({ isEndState, isNegative }) => isEndState && isNegative)[0].id;
   getStates = () => STATES;
   set = (key, value) => {
     this[key] = value;
