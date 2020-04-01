@@ -43,7 +43,7 @@ const STATES = [
       }]
     },
     customer: {
-      label: 'Payment pending',
+      label: 'Confirming',
       description: '',
       nextStates: []
     }
@@ -63,24 +63,6 @@ const STATES = [
     },
     customer: {
       label: 'Paid',
-      description: '',
-      nextStates: []
-    }
-  },
-  {
-    id: 'Cancel',
-    needsAuthorization: false,
-    isNegative: true,
-    business: {
-      label: 'Cancellation request',
-      description: '',
-      nextStates: [{
-        id: 'Cancelled',
-        label: 'Cancel'
-      }]
-    },
-    customer: {
-      label: 'Pending cancellation',
       description: '',
       nextStates: []
     }
