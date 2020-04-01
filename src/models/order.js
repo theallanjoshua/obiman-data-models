@@ -184,6 +184,8 @@ export default class Order {
   getPositiveEndState = () => STATES.filter(({ isEndState, isNegative }) => isEndState && !isNegative)[0].id;
   getNegativeEndState = () => STATES.filter(({ isEndState, isNegative }) => isEndState && isNegative)[0].id;
   getStates = () => STATES;
+  getStateIds = () => STATES.map(({ id }) => id);
+  getStateById = id => STATES.filter(state => state.id === id)[0] || {};
   set = (key, value) => {
     this[key] = value;
     return this;

@@ -45,10 +45,7 @@ const STATES = [
     customer: {
       label: 'Payment pending',
       description: '',
-      nextStates: [{
-        id: 'Cancel',
-        label: 'Cancel'
-      }]
+      nextStates: []
     }
   },
   {
@@ -158,6 +155,8 @@ export default class Bill {
   getPositiveEndState = () => STATES.filter(({ isEndState, isNegative }) => isEndState && !isNegative)[0].id;
   getNegativeEndState = () => STATES.filter(({ isEndState, isNegative }) => isEndState && isNegative)[0].id;
   getStates = () => STATES;
+  getStateIds = () => STATES.map(({ id }) => id);
+  getStateById = id => STATES.filter(state => state.id === id)[0] || {};
   getGroupedComposition = (preGroupingCondition) => this.composition
     .filter(preGroupingCondition ? preGroupingCondition : () => true)
     .reduce((acc, item) => {
@@ -241,7 +240,7 @@ export default class Bill {
       const validationErrors = billCompositionEntity.validate();
       return Object.keys(validationErrors).length ? { ...acc, composition: [ 'Composition has errors' ] } : { ...acc };
     }, {});
-    const statusErrors = !this.getStates().includes(this.status) ? { status: [ 'Invalid status' ] } : {};
+    const statusErrors = !this.getStates().map(({ id }) => id).includes(this.status) ? { status: [ 'Invalid status' ] } : {};
     return { ...sourceErrors, ...sourceIdErrors, ...compositionErrors, ...statusErrors };
   }
 }
