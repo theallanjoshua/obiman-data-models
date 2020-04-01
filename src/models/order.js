@@ -128,7 +128,7 @@ const STATES = [
       }]
     },
     customer: {
-      label: 'Pending cancellation',
+      label: 'Cancelling',
       description: '',
       nextStates: []
     }

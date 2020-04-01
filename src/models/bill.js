@@ -56,10 +56,7 @@ const STATES = [
     business: {
       label: 'Paid',
       description: '',
-      nextStates: [{
-        id: 'Cancelled',
-        label: 'Cancel'
-      }]
+      nextStates: []
     },
     customer: {
       label: 'Paid',
